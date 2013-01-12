@@ -1,0 +1,23 @@
+@font-face {
+    font-family: 'Copse';
+    src: url('fonts/copse-regular-webfont.eot');
+    src: url('fonts/copse-regular-webfont.eot') format('embedded-opentype'),
+         url('fonts/copse-regular-webfont.woff') format('woff'),
+         url('fonts/copse-regular-webfont.ttf') format('truetype'),
+         url('fonts/copse-regular-webfont.svg#copseregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+body { font-family: 'Copse', serif; background: #fbfbfb; margin: 0; height: 100%; position: relative; }
+
+nav { position: absolute; top:0; bottom:0; left:0; height: 100%; width: 255px; background: #f5f5f5;}
+nav ul { list-style-type: none; padding: 0; background: #cdcbcb }
+nav li { height: 20px; vertical-align: middle; padding: 15px 20px; border-top: 1px solid white; background: #f5f5f5; }
+nav li.active { border-color: #cdcbcb; border-style: solid; border-width: 1px 0 1px 7px; background: #fbfbfb; position: relative; left:1px; z-index: 2; }
+nav li.active+li { border-top: 0; }
+
+#content { position: relative; margin-left: 255px; border-left: #cdcbcb 1px solid; padding: 20px; }
+#home { background: url(img/logo.png) center center no-repeat; display: block; height: 182px; margin: 20px 0; }
+#home span { display: none; }
