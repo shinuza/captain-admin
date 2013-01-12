@@ -14,10 +14,35 @@ body { font-family: 'Copse', serif; background: #fbfbfb; margin: 0; height: 100%
 
 nav { position: absolute; top:0; bottom:0; left:0; height: 100%; width: 255px; background: #f5f5f5;}
 nav ul { list-style-type: none; padding: 0; background: #cdcbcb }
-nav li { height: 20px; vertical-align: middle; padding: 15px 20px; border-top: 1px solid white; background: #f5f5f5; }
-nav li.active { border-color: #cdcbcb; border-style: solid; border-width: 1px 0 1px 7px; background: #fbfbfb; position: relative; left:1px; z-index: 2; }
-nav li.active+li { border-top: 0; }
+nav li { height: 20px; padding: 15px 20px; border-top: 1px solid white; background: #f5f5f5; }
+nav b { float: right; position: relative; top: -3px; }
+nav li.active, nav li:hover { border-color: #cdcbcb; border-style: solid; border-width: 1px 0 1px 7px; background: #fbfbfb; position: relative; left: 1px; z-index: 2; }
+nav li.active+li, nav li:hover+li { border-top: 0; }
 
 #content { position: relative; margin-left: 255px; border-left: #cdcbcb 1px solid; padding: 20px; }
 #home { background: url(img/logo.png) center center no-repeat; display: block; height: 182px; margin: 20px 0; }
 #home span { display: none; }
+
+.icon32 { display: inline-block; background: url(img/icons.png); width: 32px; height: 32px; }
+
+.icon32.preview { background-position: 0 0; }
+.icon32.heart { background-position: -50px 0; }
+.icon32.trash { background-position: -100px 0; }
+.icon32.user { background-position: -142px 0; }
+.icon32.tags { background-position: -202px 0; }
+.icon32.forbidden { background-position: -250px 0; }
+.icon32.power { background-position: -300px 0; }
+.icon32.documents { background-position: -347px 0; }
+.icon32.home { background-position: -400px 0; }
+.icon32.gears { background-position: -450px 0; }
+
+.icon32.left { background-position: 0 -50px; }
+.icon32.right { background-position: -50px -50px; }
+.icon32.top { background-position: -50px 0; }
+.icon32.bottom { background-position: -50px 0; }
+.icon32.plus { background-position: -50px 0; }
+.icon32.minus { background-position: -50px 0; }
+.icon32.tick { background-position: -50px 0; }
+.icon32.delete { background-position: -50px 0; }
+.icon32.twitter { background-position: -50px 0; }
+.icon32.facebook { background-position: -50px 0; }
