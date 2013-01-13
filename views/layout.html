@@ -11,63 +11,76 @@
         <a href="/" id="home"><span>Home</span></a>
         <ul id="menu">
           <li>Dashboard<b class="icon32 home"></b></li>
-          <li class="active">Posts<b class="icon32 documents"></b></li>
-          <li>Tags<b class="icon32 tags"></b></li>
+          <li>Posts<b class="icon32 documents"></b></li>
           <li>Users<b class="icon32 user"></b></li>
           <li>Settings<b class="icon32 gears"></b></li>
         </ul>
       </nav>
-      <div id="content">
-
-        <h1>Posts</h1>
-
-        <p>
-          <a href="#" class="button icon add">Create new</a>
-          <a href="#" class="button icon delete">Delete selected</a>
-        </p>
-
-        <table>
-          <thead>
-            <tr>
-              <th></th>
-              <th>Title</th>
-              <th>Date</th>
-              <th>Published</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><input type="checkbox"></td>
-              <td>Lorem ipsum dolor sit amet</td>
-              <td>23 October, 2012</td>
-              <td><input type="checkbox"></td>
-            </tr>
-            <tr>
-              <td><input type="checkbox"></td>
-              <td>Lorem ipsum dolor sit amet</td>
-              <td>23 October, 2012</td>
-              <td><input type="checkbox"></td>
-            </tr>
-            <tr>
-              <td><input type="checkbox"></td>
-              <td>Lorem ipsum dolor sit amet</td>
-              <td>23 October, 2012</td>
-              <td><input type="checkbox"></td>
-            </tr>
-            <tr>
-              <td><input type="checkbox"></td>
-              <td>Lorem ipsum dolor sit amet</td>
-              <td>23 October, 2012</td>
-              <td><input type="checkbox"></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <div id="content"></div>
   </div>
+
+  <script src="js/zepto.js"></script>
+  <script src="js/swig.pack.js"></script>
   <script>
     window.onresize = window.onload = function() {
       content.style.height = document.height + 'px';
     }
+  </script>
+  <script>
+    $(function() {
+      var root = 'http://localhost:8080';
+      var compiled = swig.compile(list.innerHTML, {templateName: 'list'});
+
+      $.getJSON(root + '/posts/', function(data) {
+        var context = {
+          'pageName': 'Posts',
+          'columns': [
+            {'label': 'Title', 'value': 'title'},
+            {'label': 'Created at', 'value': 'createdAt', 'type': 'date'},
+            {'label': 'Published', 'value': 'published', 'type': 'bool'}
+          ],
+          'lines': data
+        };
+        $('#content').html(compiled(context));
+      });
+    });
+  </script>
+  <script type="text/tmpl" id="list">
+    <h1>{{pageName}}</h1>
+
+    <p>
+      <a href="#" class="button icon add">Create new</a>
+      <a href="#" class="button icon delete">Delete selected</a>
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          {% for column in columns %}
+          <th>{{column.label}}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for line in lines %}
+        <tr data-slug="{{line.slug}}">
+          <td><input type="checkbox"></td>
+          {% for column in columns %}
+          <td>
+            {% if column.type == 'date' %}
+              {{line[column.value]| date('F d, Y')}}
+            {% else if column.type == 'bool' %}
+              <input type="checkbox" {% if line[column.value] %}checked{% endif %}>
+            {% else %}
+              {{line[column.value]}}
+            {% endif %}
+          </td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </script>
   </body>
 </html>
