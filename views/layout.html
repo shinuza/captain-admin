@@ -35,19 +35,19 @@
     });
   </script>
   <script type="text/tmpl" id="list">
-    <h1>{{pageName}}</h1>
+    <h1>{{name|title}}</h1>
 
     <p>
       <a href="#" class="button icon add">Create new</a>
       <a href="#" class="button icon delete">Delete selected</a>
     </p>
 
-    <table>
+    <table id="{{name}}">
       <thead>
         <tr>
           <th></th>
           {% for column in columns %}
-          <th>{{column.label}}</th>
+          <th class="{{name}}-{{column.value}}">{{column.label}}</th>
           {% endfor %}
         </tr>
       </thead>
@@ -56,7 +56,7 @@
         <tr data-slug="{{line.slug}}">
           <td><input type="checkbox"></td>
           {% for column in columns %}
-          <td>
+          <td class="{{name}}-{{column.value}}">
             {% if column.type == 'date' %}
               {{line[column.value]| date('F d, Y')}}
             {% else if column.type == 'bool' %}

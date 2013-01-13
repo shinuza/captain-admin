@@ -16,7 +16,7 @@ function ListView(name, columns) {
 ListView.prototype.fetch = function fetch(url, cb) {
   $.getJSON(url, function(data) {
     var context = {
-      'pageName': this.name,
+      'name': this.name,
       'columns': this.columns,
       'lines': data
     };
@@ -24,13 +24,13 @@ ListView.prototype.fetch = function fetch(url, cb) {
   }.bind(this));
 };
 
-var posts = new ListView('Posts', [
+var posts = new ListView('posts', [
   {'label': 'Title', 'value': 'title'},
   {'label': 'Created at', 'value': 'createdAt', 'type': 'date'},
   {'label': 'Published', 'value': 'published', 'type': 'bool'}
 ]);
 
-var users = new ListView('Users', [
+var users = new ListView('users', [
   {'label': 'Username', 'value': 'username'},
   {'label': 'Created at', 'value': 'createdAt', 'type': 'date'},
   {'label': 'Is staff', 'value': 'isStaff', 'type': 'bool'}
