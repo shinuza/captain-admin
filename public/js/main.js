@@ -7,23 +7,30 @@ function getTmpl(name) {
   return templates[name];
 }
 
-function ListView(name, columns) {
+function ListView(name, url, columns) {
   this.name = name;
+  this.url = url;
   this.columns = columns;
 }
 
 ListView.prototype = {
-  fetch: function fetch(url, cb) {
-    var tmpl = getTmpl('list');
-    $.getJSON(url, function(data) {
+
+  fetch: function fetch(cb) {
+    $.getJSON(this.url, function(data) {
       var context = {
         'name': this.name,
         'columns': this.columns,
         'lines': data
       };
-      cb(tmpl(context));
+      cb(context);
     }.bind(this));
+  },
+
+  render: function(context) {
+    var tmpl = getTmpl('list');
+    return tmpl(context);
   }
+
 };
 
 function MenuView(el) {
@@ -46,18 +53,18 @@ MenuView.prototype = {
 
 var menu = new MenuView('#menu');
 
-var posts = new ListView('posts', [
+var posts = new ListView('posts', 'http://localhost:8080/posts', [
   {'label': 'Title', 'value': 'title'},
   {'label': 'Created at', 'value': 'createdAt', 'type': 'date'},
   {'label': 'Published', 'value': 'published', 'type': 'bool'}
 ]);
 
-var tags = new ListView('tags', [
+var tags = new ListView('tags', 'http://localhost:8080/tags', [
   {'label': 'Title', 'value': 'title'},
   {'label': 'Created at', 'value': 'createdAt', 'type': 'date'}
 ]);
 
-var users = new ListView('users', [
+var users = new ListView('users', 'http://localhost:8080/users', [
   {'label': 'Username', 'value': 'username'},
   {'label': 'Created at', 'value': 'createdAt', 'type': 'date'},
   {'label': 'Is staff', 'value': 'isStaff', 'type': 'bool'}
@@ -69,8 +76,8 @@ $(function() {
   function onHashChanged(e) {
     var hash = document.location.hash;
     var route = routes[hash];
-    menu.select(hash);
     route && route(e);
+    menu.select(hash);
   }
 
   function onResized() {
@@ -83,19 +90,22 @@ $(function() {
     },
 
     '#posts': function() {
-      posts.fetch('http://localhost:8080/posts', function(html) {
+      posts.fetch(function(data) {
+        var html = posts.render(data);
         content.html(html);
       });
     },
 
     '#tags': function() {
-      tags.fetch('http://localhost:8080/tags', function(html) {
+      tags.fetch(function(data) {
+        var html = tags.render(data);
         content.html(html);
       });
     },
 
     '#users': function() {
-      users.fetch('http://localhost:8080/users', function(html) {
+      users.fetch(function(data) {
+        var html = users.render(data);
         content.html(html);
       });
     },
