@@ -20,10 +20,10 @@ body { font-family: 'Copse', serif; margin: 0; height: 100%; position: relative;
 /* Navigation */
 
 nav { position: absolute; top:0; bottom:0; left:0; height: 100%; width: 255px; background: #fbfbfb;}
-nav ul { list-style-type: none; padding: 0; background: #cdcbcb }
+nav ul { list-style-type: none; padding: 0; background: #ff6018; }
 nav b { float: right; position: relative; top: -3px; }
 nav li a { display:block; height: 20px; padding: 15px 20px; border-top: 1px solid white; background: #fbfbfb; color: #333; }
-nav li a.active { border-color: #cdcbcb; border-style: solid; border-width: 1px 0 1px 7px; background: white; position: relative; left: 1px; z-index: 2; }
+nav li a.active { margin-left: 5px; border-color: #cdcbcb; border-style: solid; border-width: 1px 0 1px 0; background: white; position: relative; left: 1px; z-index: 2; }
 nav li a:hover { color: #ff6018 }
 
 /* Typo */
@@ -39,6 +39,7 @@ table td { border-bottom: 1px solid #eee; }
 
 /* Module */
 
+.button:hover { background: #ff6018; }
 .button { display: inline-block; background: #333; padding: 5px 10px 9px 10px; min-width: 130px; color: white; text-decoration: none; text-indent: 20px; border-radius: 2px; }
 .button.icon { display: inline-block; background-image: url(img/icons-16.png); width: 16px; height: 16px; }
 .button.icon.add { background-position: 8px 8px; }
