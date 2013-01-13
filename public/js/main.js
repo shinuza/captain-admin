@@ -10,18 +10,18 @@ function getTmpl(name) {
 function ListView(name, columns) {
   this.name = name;
   this.columns = columns;
-  this.text = null;
 }
 
-ListView.prototype ={
+ListView.prototype = {
   fetch: function fetch(url, cb) {
+    var tmpl = getTmpl('list');
     $.getJSON(url, function(data) {
       var context = {
         'name': this.name,
         'columns': this.columns,
         'lines': data
       };
-      cb(getTmpl('list')(context));
+      cb(tmpl(context));
     }.bind(this));
   }
 };
