@@ -79,7 +79,7 @@ $(function() {
 
   var routes = {
     '#dashboard': function() {
-
+      content.html('<h1>Not implemented</h1>');
     },
 
     '#posts': function() {
@@ -101,7 +101,7 @@ $(function() {
     },
 
     '#settings': function() {
-
+      content.html('<h1>Not implemented</h1>');
     }
   };
 
