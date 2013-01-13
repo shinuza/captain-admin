@@ -10,10 +10,10 @@
       <nav>
         <a href="/" id="home"><span>Home</span></a>
         <ul id="menu">
-          <li>Dashboard<b class="icon32 home"></b></li>
-          <li>Posts<b class="icon32 documents"></b></li>
-          <li>Users<b class="icon32 user"></b></li>
-          <li>Settings<b class="icon32 gears"></b></li>
+          <li><a href="#dashboard">Dashboard<b class="icon32 home"></b></a></li>
+          <li><a href="#posts">Posts<b class="icon32 documents"></b></a></li>
+          <li><a href="#users">Users<b class="icon32 user"></b></a></li>
+          <li><a href="#settings">Settings<b class="icon32 gears"></b></a></li>
         </ul>
       </nav>
       <div id="content"></div>
@@ -22,18 +22,6 @@
   <script src="js/zepto.js"></script>
   <script src="js/swig.pack.js"></script>
   <script src="js/main.js"></script>
-  <script>
-    window.onresize = window.onload = function() {
-      content.style.height = document.height + 'px';
-    }
-  </script>
-  <script>
-    $(function() {
-      posts.fetch('http://localhost:8080/posts', function(html) {
-        $('#content').html(html);
-      });
-    });
-  </script>
   <script type="text/tmpl" id="list">
     <h1>{{name|title}}</h1>
 

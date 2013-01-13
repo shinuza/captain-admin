@@ -7,8 +7,9 @@
          url('fonts/copse-regular-webfont.svg#copseregular') format('svg');
     font-weight: normal;
     font-style: normal;
-
 }
+
+/* Structure */
 
 body { font-family: 'Copse', serif; margin: 0; height: 100%; position: relative; }
 
@@ -20,13 +21,13 @@ body { font-family: 'Copse', serif; margin: 0; height: 100%; position: relative;
 
 nav { position: absolute; top:0; bottom:0; left:0; height: 100%; width: 255px; background: #fbfbfb;}
 nav ul { list-style-type: none; padding: 0; background: #cdcbcb }
-nav li { height: 20px; padding: 15px 20px; border-top: 1px solid white; background: #fbfbfb; }
 nav b { float: right; position: relative; top: -3px; }
-nav li.active, nav li:hover { border-color: #cdcbcb; border-style: solid; border-width: 1px 0 1px 7px; background: white; position: relative; left: 1px; z-index: 2; }
-nav li.active+li, nav li:hover+li { border-top: 0; }
+nav li a { display:block; height: 20px; padding: 15px 20px; border-top: 1px solid white; background: #fbfbfb; color: #333; }
+nav li a.active { border-color: #cdcbcb; border-style: solid; border-width: 1px 0 1px 7px; background: white; position: relative; left: 1px; z-index: 2; }
+nav li a:hover { color: #ff6018 }
 
 /* Typo */
-
+a { text-decoration: none; }
 h1 { font-size: 50px; opacity: .2; position: relative; margin: 0; }
 
 /* Table */
