@@ -21,6 +21,7 @@
 
   <script src="js/zepto.js"></script>
   <script src="js/swig.pack.js"></script>
+  <script src="js/main.js"></script>
   <script>
     window.onresize = window.onload = function() {
       content.style.height = document.height + 'px';
@@ -28,20 +29,8 @@
   </script>
   <script>
     $(function() {
-      var root = 'http://localhost:8080';
-      var compiled = swig.compile(list.innerHTML, {templateName: 'list'});
-
-      $.getJSON(root + '/posts/', function(data) {
-        var context = {
-          'pageName': 'Posts',
-          'columns': [
-            {'label': 'Title', 'value': 'title'},
-            {'label': 'Created at', 'value': 'createdAt', 'type': 'date'},
-            {'label': 'Published', 'value': 'published', 'type': 'bool'}
-          ],
-          'lines': data
-        };
-        $('#content').html(compiled(context));
+      posts.fetch('http://localhost:8080/posts', function(html) {
+        $('#content').html(html);
       });
     });
   </script>
