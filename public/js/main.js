@@ -97,5 +97,5 @@ $(function() {
   onHashChanged();
   onResized();
   window.onhashchange = onHashChanged;
-  window.onresize = onResized
+  window.onresize = onResized;
 });
