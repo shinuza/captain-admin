@@ -7,116 +7,136 @@ function getTmpl(name) {
   return templates[name];
 }
 
-function ListView(name, url, columns) {
-  this.name = name;
-  this.url = url;
-  this.columns = columns;
-}
+var App = {};
 
-ListView.prototype = {
+App.Users = Backbone.Collection.extend({url: 'http://localhost:8080/users'});
+App.Posts = Backbone.Collection.extend({url: 'http://localhost:8080/posts'});
+App.Tags = Backbone.Collection.extend({url: 'http://localhost:8080/tags'});
 
-  fetch: function fetch(cb) {
-    $.getJSON(this.url, function(data) {
-      var context = {
-        'name': this.name,
-        'columns': this.columns,
-        'lines': data
-      };
-      cb(context);
-    }.bind(this));
+App.ListView = Backbone.View.extend({
+
+  'el': '#content',
+
+  templateName: 'list',
+
+  initialize: function initialize(options) {
+    this.name = options.name;
+    this.columns = options.columns;
+    this.tmpl = getTmpl(this.templateName);
   },
 
-  render: function(context) {
-    var tmpl = getTmpl('list');
-    return tmpl(context);
+  render: function render(data) {
+    var context = {
+      'name': this.name,
+      'columns': this.columns,
+      'lines': data
+    };
+    var html = this.tmpl(context);
+    this.$el.html(html);
   }
 
-};
+});
 
-function MenuView(el) {
-  this.el = $(el);
-  this.links = $('a', $('#menu'));
-}
+App.MenuView = Backbone.View.extend({
 
-MenuView.prototype = {
+  el: '#menu',
+
   unselectAll: function unselectAll() {
-    this.links.each(function(i, link) {
+    this.$el.find('a').each(function(i, link) {
       $(link).removeClass('active');
     });
   },
 
-  select: function(hash) {
+  select: function select(hash) {
     this.unselectAll();
-    this.el.find('a[href="' + hash + '"]').addClass('active');
+    this.$el.find('a[href="#' + hash + '"]').addClass('active');
   }
-};
 
-var menu = new MenuView('#menu');
+});
 
-var posts = new ListView('posts', 'http://localhost:8080/posts', [
-  {'label': 'Title', 'value': 'title'},
-  {'label': 'Created at', 'value': 'createdAt', 'type': 'date'},
-  {'label': 'Published', 'value': 'published', 'type': 'bool'}
-]);
+App.Router = Backbone.Router.extend({
 
-var tags = new ListView('tags', 'http://localhost:8080/tags', [
-  {'label': 'Title', 'value': 'title'},
-  {'label': 'Created at', 'value': 'createdAt', 'type': 'date'}
-]);
+  routes: {
+    "posts":       "posts",
+    "posts/:slug": "posts",
+    "tags":        "tags",
+    "tags/:slug":  "tags",
+    "users":       "users",
+    "users/:slug": "users"
+  },
 
-var users = new ListView('users', 'http://localhost:8080/users', [
-  {'label': 'Username', 'value': 'username'},
-  {'label': 'Created at', 'value': 'createdAt', 'type': 'date'},
-  {'label': 'Is staff', 'value': 'isStaff', 'type': 'bool'}
-]);
+  posts: function() {
+    App.posts.fetch();
+  },
+
+  tags: function() {
+    App.tags.fetch();
+  },
+
+  users: function() {
+    App.users.fetch();
+  }
+
+});
 
 $(function() {
   var content = $('#content');
-
-  function onHashChanged(e) {
-    var hash = document.location.hash;
-    var route = routes[hash];
-    route && route(e);
-    menu.select(hash);
-  }
 
   function onResized() {
     content.css('height', document.height);
   }
 
-  var routes = {
-    '#dashboard': function() {
-      content.html('<h1>Not implemented</h1>');
-    },
+  App.menuView = new App.MenuView({selector: '#menu'});
 
-    '#posts': function() {
-      posts.fetch(function(data) {
-        var html = posts.render(data);
-        content.html(html);
-      });
-    },
+  App.postsView = new App.ListView({
+    name: 'posts',
+    columns: [
+      {'label': 'Title', 'value': 'title'},
+      {'label': 'Created at', 'value': 'createdAt', 'type': 'date'},
+      {'label': 'Published', 'value': 'published', 'type': 'bool'}
+    ]
+  });
 
-    '#tags': function() {
-      tags.fetch(function(data) {
-        var html = tags.render(data);
-        content.html(html);
-      });
-    },
+  App.tagsView = new App.ListView({
+    name: 'tags',
+    columns: [
+      {'label': 'Title', 'value': 'title'},
+      {'label': 'Created at', 'value': 'createdAt', 'type': 'date'}
+    ]
+  });
 
-    '#users': function() {
-      users.fetch(function(data) {
-        var html = users.render(data);
-        content.html(html);
-      });
-    },
+  App.usersView = new App.ListView({
+    name: 'users',
+    columns: [
+      {'label': 'Username', 'value': 'username'},
+      {'label': 'Created at', 'value': 'createdAt', 'type': 'date'},
+      {'label': 'Is staff', 'value': 'isStaff', 'type': 'bool'}
+    ]
+  });
 
-    '#settings': function() {
-      content.html('<h1>Not implemented</h1>');
-    }
-  };
+  App.users = new App.Users();
+  App.posts = new App.Posts();
+  App.tags = new App.Tags();
+  App.router = new App.Router();
 
-  onHashChanged();
+  App.router.on('all', function(route) {
+   App.menuView.select(route.split(':')[1]);
+  });
+
+  App.users.on('sync', function(collection) {
+    App.usersView.render(collection.toJSON());
+  });
+
+  App.posts.on('sync', function(collection) {
+    App.postsView.render(collection.toJSON());
+  });
+
+  App.tags.on('sync', function(collection) {
+    App.tagsView.render(collection.toJSON());
+  });
+
+
   onResized();
-  window.onhashchange = onHashChanged;
   window.onresize = onResized;
+  Backbone.history.start();
 });
