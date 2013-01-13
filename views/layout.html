@@ -46,7 +46,7 @@
           {% for column in columns %}
           <td class="{{name}}-{{column.value}}">
             {% if column.type == 'date' %}
-              {{line[column.value]| date('F d, Y')}}
+              {{line[column.value]| date('F jS, Y')}}
             {% else if column.type == 'bool' %}
               <input type="checkbox" {% if line[column.value] %}checked{% endif %}>
             {% else %}
