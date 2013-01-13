@@ -52,6 +52,11 @@ var posts = new ListView('posts', [
   {'label': 'Published', 'value': 'published', 'type': 'bool'}
 ]);
 
+var tags = new ListView('tags', [
+  {'label': 'Title', 'value': 'title'},
+  {'label': 'Created at', 'value': 'createdAt', 'type': 'date'}
+]);
+
 var users = new ListView('users', [
   {'label': 'Username', 'value': 'username'},
   {'label': 'Created at', 'value': 'createdAt', 'type': 'date'},
@@ -79,6 +84,12 @@ $(function() {
 
     '#posts': function() {
       posts.fetch('http://localhost:8080/posts', function(html) {
+        content.html(html);
+      });
+    },
+
+    '#tags': function() {
+      tags.fetch('http://localhost:8080/tags', function(html) {
         content.html(html);
       });
     },
