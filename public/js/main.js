@@ -56,7 +56,8 @@ App.ListView = Backbone.View.extend({
   templateName: 'list',
 
   events: {
-    'click tbody tr': 'onClick'
+    'click .edit': 'onClick',
+    'click .delete': 'onDelete'
   },
 
   initialize: function initialize(options) {
@@ -75,9 +76,30 @@ App.ListView = Backbone.View.extend({
     this.$el.empty().html(html);
   },
 
+  selected: function selected() {
+    var inputs = this.$el.find('.select');
+    return _.chain(inputs)
+      .filter(function(input) {
+        return input.checked === true;
+      })
+      .map(function(input) {
+        return parseInt($(input).data('id'), 10);
+      })
+      .value();
+  },
+
+  get: function(id) {
+    return this.$el.find('[data-id="' + id + '"]');
+  },
+
   onClick: function onClick(e) {
-    var el = $(e.currentTarget);
-    App.router.navigate('posts/' + el.data('id'), {trigger: true})
+    var el = $(e.currentTarget).parent();
+    App.router.navigate('posts/' + el.data('id'), {trigger: true});
+  },
+
+  onDelete: function() {
+    this.trigger('delete', this.selected());
+    return false;
   }
 
 });
@@ -269,14 +291,34 @@ $(function() {
 
   App.users.on('sync', function(collection) {
     App.usersView.render(collection.toJSON());
+    App.usersView.on('delete', function(ids) {
+      ids.forEach(function(id) {
+        collection.get(id).destroy();
+      });
+    });
   });
 
   App.posts.on('sync', function(collection) {
     App.postsView.render(collection.toJSON());
+    App.postsView.on('delete', function(ids) {
+      ids.forEach(function(id) {
+        collection.get(id).destroy();
+      });
+    });
+  });
+
+  App.posts.on('destroy', function(model) {
+    var view = App.postsView.get(model.id);
+    view.remove();
   });
 
   App.tags.on('sync', function(collection) {
     App.tagsView.render(collection.toJSON());
+    App.tagsView.on('delete', function(ids) {
+      ids.forEach(function(id) {
+        collection.get(id).destroy();
+      });
+    });
   });
 
 

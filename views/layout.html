@@ -45,9 +45,9 @@
       <tbody>
         {% for line in lines %}
         <tr data-id="{{line.id}}">
-          <td><input type="checkbox"></td>
+          <td><input type="checkbox" class="select" data-id="{{line.id}}"></td>
           {% for column in columns %}
-          <td class="{{name}}-{{column.value}}">
+          <td class="{{name}}-{{column.value}} edit">
             {% if column.type == 'date' %}
               {{line[column.value]| date('F jS, Y')}}
             {% else if column.type == 'bool' %}
