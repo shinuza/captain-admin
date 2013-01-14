@@ -134,13 +134,19 @@ App.FormView = Backbone.View.extend({
   },
 
   initialize: function(options) {
+    var title = this.make('h1', {}, options.name);
+    var submit = this.make('input', {type: 'submit'});
+
+    this.$el.append(title);
     _.each(options.fields, this.render, this);
+    this.$el.append(submit);
   },
 
   render: function(options, name) {
     var line = this.make('p');
     var label = this.make('label', {'for': name}, options.label);
     var input = this[options.type.name](name, options.attributes || {});
+
     $(line).append(label, input);
     this.$el.append(line);
   },
@@ -246,6 +252,7 @@ $(function() {
   App.region = new App.Region();
 
   App.postForm = new App.FormView({
+    name: 'Posts',
     fields: {
       title: {type: String, label: 'Title'},
       body: {type: Text, label: 'Body'},
@@ -254,6 +261,7 @@ $(function() {
   });
 
   App.userForm = new App.FormView({
+    name: 'Users',
     fields: {
       username: {type: String, label: 'Username'},
       password: {type: String, label: 'Password', attributes: {'type': 'password'}},
@@ -265,6 +273,7 @@ $(function() {
   });
 
   App.tagForm = new App.FormView({
+    name: 'Tags',
     fields: {
       title: {type: String, label: 'Title'}
     }
