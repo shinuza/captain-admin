@@ -298,6 +298,11 @@ $(function() {
     });
   });
 
+  App.users.on('destroy', function(model) {
+    var view = App.usersView.get(model.id);
+    view.remove();
+  });
+
   App.posts.on('sync', function(collection) {
     App.postsView.render(collection.toJSON());
     App.postsView.on('delete', function(ids) {
@@ -319,6 +324,11 @@ $(function() {
         collection.get(id).destroy();
       });
     });
+  });
+
+  App.tags.on('destroy', function(model) {
+    var view = App.tagsView.get(model.id);
+    view.remove();
   });
 
 
