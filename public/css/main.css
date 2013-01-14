@@ -38,13 +38,21 @@ table th { text-align: left; border-bottom: 2px solid #eee; }
 table td { border-bottom: 1px solid #eee; }
 table tbody tr:hover { background: #eee; cursor: pointer; }
 
+/* Form */
+
+form input, form textarea  { display: block; border: 3px solid #cdcbcb; width: 95%; padding: 5px; font-family: inherit; font-size: 14px;}
+form input:focus, form textarea:focus {outline: 1px solid #333;;}
+form input[type="checkbox"] { display: inline; width: auto; }
+
 /* Module */
 
 .button:hover { background: #ff6018; }
-.button { display: inline-block; background: #333; padding: 5px 10px 9px 10px; min-width: 130px; color: white; text-decoration: none; text-indent: 20px; border-radius: 2px; }
+.button { display: inline-block; background: #333; padding: 5px 10px 10px 10px; min-width: 120px; color: white; text-decoration: none; text-indent: 20px; border-radius: 2px; border: 0; cursor: pointer; font-family: inherit; font-size: 14px; }
 .button.icon { display: inline-block; background-image: url(img/icons-16.png); width: 16px; height: 16px; }
 .button.icon.add { background-position: 8px 8px; }
 .button.icon.delete { background-position: 8px -92px; }
+.button[type=submit] { text-indent: 0; min-width: 90px; padding-bottom: 5px; background: #ff6018; }
+.button[type=submit]:hover { background: #333; }
 
 /* Icons */
 

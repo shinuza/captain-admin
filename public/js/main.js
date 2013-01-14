@@ -135,7 +135,7 @@ App.FormView = Backbone.View.extend({
 
   initialize: function(options) {
     var title = this.make('h1', {}, options.name);
-    var submit = this.make('input', {type: 'submit'});
+    var submit = this.make('button', {type: 'submit', 'class': 'button'}, 'Submit');
 
     this.$el.append(title);
     _.each(options.fields, this.render, this);
