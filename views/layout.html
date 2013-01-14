@@ -47,13 +47,27 @@
         <tr data-id="{{line.id}}">
           <td><input type="checkbox" class="select" data-id="{{line.id}}"></td>
           {% for column in columns %}
-          <td class="{{name}}-{{column.value}} edit">
+          <td class="{{name}}-{{column.value}} {% if column.type != "bool" %}edit{% endif %}">
+
+            {# Date #}
             {% if column.type == 'date' %}
               {{line[column.value]| date('F jS, Y')}}
+
+            {# Checkboxes #}
+
             {% else if column.type == 'bool' %}
-              <input type="checkbox" {% if line[column.value] %}checked{% endif %} data-name="{{column.value}}">
+              <input
+                type="checkbox"
+                {% if line[column.value] %}checked{% endif %}
+                data-attribute="{{column.value}}"
+                data-id="{{line.id}}"
+                class="quick-check">
+
+            {# Default #}
+
             {% else %}
               {{line[column.value]}}
+
             {% endif %}
           </td>
           {% endfor %}

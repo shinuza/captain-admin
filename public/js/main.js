@@ -57,20 +57,22 @@ App.ListView = Backbone.View.extend({
 
   events: {
     'click .edit': 'onClick',
-    'click .delete': 'onDelete'
+    'click .delete': 'onDelete',
+    'click .quick-check': 'onQuickCheck'
   },
 
   initialize: function initialize(options) {
     this.name = options.name;
     this.columns = options.columns;
+    this.collection = options.collection;
     this.tmpl = getTmpl(this.templateName);
   },
 
-  render: function render(data) {
+  render: function render() {
     var context = {
       'name': this.name,
       'columns': this.columns,
-      'lines': data
+      'lines': this.collection.toJSON()
     };
     var html = this.tmpl(context);
     this.$el.empty().html(html);
@@ -100,6 +102,17 @@ App.ListView = Backbone.View.extend({
   onDelete: function() {
     this.trigger('delete', this.selected());
     return false;
+  },
+
+  onQuickCheck: function onQuickCheck(e) {
+    var el = $(e.currentTarget);
+    var id = el.data('id');
+    var attribute = el.data('attribute');
+    var checked = el.prop('checked');
+
+    var model = this.collection.get(id);
+    model.set(attribute, checked);
+    model.save();
   }
 
 });
@@ -140,7 +153,7 @@ App.FormView = Backbone.View.extend({
     _.each(model.attributes, function(value, key) {
       var field = this.getField(key);
       if(typeof value === 'boolean') {
-        field.attr('checked', value);
+        field.prop('checked', value);
       } else {
         field.val(value);
       }
@@ -226,6 +239,12 @@ $(function() {
     content.css('height', document.height);
   }
 
+  App.users = new App.Users();
+  App.posts = new App.Posts();
+  App.tags = new App.Tags();
+  App.router = new App.Router();
+  App.region = new App.Region();
+
   App.postForm = new App.FormView({
     fields: {
       title: {type: String, label: 'Title'},
@@ -254,6 +273,7 @@ $(function() {
   App.menuView = new App.MenuView;
 
   App.postsView = new App.ListView({
+    collection: App.posts,
     name: 'posts',
     columns: [
       {'label': 'Title', 'value': 'title'},
@@ -263,6 +283,7 @@ $(function() {
   });
 
   App.tagsView = new App.ListView({
+    collection: App.tags,
     name: 'tags',
     columns: [
       {'label': 'Title', 'value': 'title'},
@@ -271,6 +292,7 @@ $(function() {
   });
 
   App.usersView = new App.ListView({
+    collection: App.users,
     name: 'users',
     columns: [
       {'label': 'Username', 'value': 'username'},
@@ -279,18 +301,12 @@ $(function() {
     ]
   });
 
-  App.users = new App.Users();
-  App.posts = new App.Posts();
-  App.tags = new App.Tags();
-  App.router = new App.Router();
-  App.region = new App.Region();
-
   App.router.on('all', function(route) {
    App.menuView.select(route.split(':')[1]);
   });
 
   App.users.on('sync', function(collection) {
-    App.usersView.render(collection.toJSON());
+    App.usersView.render();
     App.usersView.on('delete', function(ids) {
       ids.forEach(function(id) {
         collection.get(id).destroy();
@@ -304,7 +320,7 @@ $(function() {
   });
 
   App.posts.on('sync', function(collection) {
-    App.postsView.render(collection.toJSON());
+    App.postsView.render();
     App.postsView.on('delete', function(ids) {
       ids.forEach(function(id) {
         collection.get(id).destroy();
@@ -318,7 +334,7 @@ $(function() {
   });
 
   App.tags.on('sync', function(collection) {
-    App.tagsView.render(collection.toJSON());
+    App.tagsView.render();
     App.tagsView.on('delete', function(ids) {
       ids.forEach(function(id) {
         collection.get(id).destroy();
