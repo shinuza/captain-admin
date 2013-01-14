@@ -36,6 +36,7 @@ table { width: 100%; border-collapse: collapse; }
 table th, table td { padding: 7px; }
 table th { text-align: left; border-bottom: 2px solid #eee; }
 table td { border-bottom: 1px solid #eee; }
+table tbody tr:hover { background: #eee; cursor: pointer; }
 
 /* Module */
 

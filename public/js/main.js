@@ -1,23 +1,63 @@
-var templates = {};
-
-function getTmpl(name) {
-  if(!templates[name]) {
-    templates[name] = swig.compile($('#' + name).html(), {templateName: name});
-  }
-  return templates[name];
-}
-
 var App = {};
 
-App.Users = Backbone.Collection.extend({url: 'http://localhost:8080/users'});
-App.Posts = Backbone.Collection.extend({url: 'http://localhost:8080/posts'});
-App.Tags = Backbone.Collection.extend({url: 'http://localhost:8080/tags'});
+App.templates = {};
+
+function getTmpl(name) {
+  if(!App.templates[name]) {
+    App.templates[name] = swig.compile($('#' + name).html(), {templateName: name});
+  }
+  return App.templates[name];
+}
+
+var Collection = Backbone.Collection.extend({
+
+  initialize: function() {
+    this.on('sync', function() {
+      this.synced = true;
+    }, this);
+  },
+
+  onSync: function(cb) {
+    if(this.synced === true) {
+      cb(this);
+    } else {
+      this.on('sync', cb);
+    }
+  }
+
+});
+
+App.Users = Collection.extend({
+  url: 'http://localhost:8080/users'
+});
+
+App.Posts = Collection.extend({
+  url: 'http://localhost:8080/posts'
+});
+
+App.Tags = Collection.extend({
+  url: 'http://localhost:8080/tags'
+});
+
+App.Region = Backbone.View.extend({
+
+  el: '#content',
+
+  setContent: function(view) {
+    this.$el.empty().append(view.$el);
+  }
+
+});
 
 App.ListView = Backbone.View.extend({
 
-  'el': '#content',
+  tagName: 'div',
 
   templateName: 'list',
+
+  events: {
+    'click tbody tr': 'onClick'
+  },
 
   initialize: function initialize(options) {
     this.name = options.name;
@@ -32,7 +72,57 @@ App.ListView = Backbone.View.extend({
       'lines': data
     };
     var html = this.tmpl(context);
-    this.$el.html(html);
+    this.$el.empty().html(html);
+  },
+
+  onClick: function onClick(e) {
+    var el = $(e.currentTarget);
+    App.router.navigate('posts/' + el.data('id'), {trigger: true})
+  }
+
+});
+
+App.FormView = Backbone.View.extend({
+
+  tagName: 'form',
+
+  Text: function(name, attributes) {
+    return this.make('textarea', _.extend({name: name}, attributes));
+  },
+
+  String: function(name, attributes) {
+    return this.make('input', _.extend({type: 'text', name: name}, attributes));
+  },
+
+  Boolean: function(name, attributes) {
+    return this.make('input', _.extend({type: 'checkbox', name: name}, attributes));
+  },
+
+  initialize: function(options) {
+    _.each(options.fields, this.render, this);
+  },
+
+  render: function(options, name) {
+    var line = this.make('p');
+    var label = this.make('label', {'for': name}, options.label);
+    var input = this[options.type.name](name, options.attributes || {});
+    $(line).append(label, input);
+    this.$el.append(line);
+  },
+
+  getField: function(key) {
+    return this.$el.find('[name="' + key + '"]');
+  },
+
+  load: function(model) {
+    _.each(model.attributes, function(value, key) {
+      var field = this.getField(key);
+      if(typeof value === 'boolean') {
+        field.attr('checked', value);
+      } else {
+        field.val(value);
+      }
+    }, this);
   }
 
 });
@@ -65,19 +155,47 @@ App.Router = Backbone.Router.extend({
     "users/:slug": "users"
   },
 
-  posts: function() {
+  initialize: function() {
     App.posts.fetch();
-  },
-
-  tags: function() {
     App.tags.fetch();
+    App.users.fetch();
   },
 
-  users: function() {
-    App.users.fetch();
+  posts: function(id) {
+    if(id) {
+      App.posts.onSync(function() {
+        App.postForm.load(App.posts.get(id));
+        App.region.setContent(App.postForm);
+      });
+    } else {
+      App.region.setContent(App.postsView);
+    }
+  },
+
+  tags: function(id) {
+    if(id) {
+      App.tags.onSync(function() {
+        App.tagForm.load(App.tags.get(id));
+        App.region.setContent(App.tagForm);
+      })
+    } else {
+      App.region.setContent(App.tagsView);
+    }
+  },
+
+  users: function(id) {
+    if(id) {
+      App.users.onSync(function() {
+        App.userForm.load(App.users.get(id));
+        App.region.setContent(App.userForm);
+      });
+    } else {
+      App.region.setContent(App.usersView);
+    }
   }
 
 });
+
 
 $(function() {
   var content = $('#content');
@@ -86,7 +204,32 @@ $(function() {
     content.css('height', document.height);
   }
 
-  App.menuView = new App.MenuView({selector: '#menu'});
+  App.postForm = new App.FormView({
+    fields: {
+      title: {type: String, label: 'Title'},
+      body: {type: Text, label: 'Body'},
+      published: {type: Boolean, label: 'Published'}
+    }
+  });
+
+  App.userForm = new App.FormView({
+    fields: {
+      username: {type: String, label: 'Username'},
+      password: {type: String, label: 'Password', attributes: {'type': 'password'}},
+      firstname: {type: String, label: 'First name'},
+      lastname: {type: String, label: 'Last name'},
+      email: {type: String, label: 'Email'},
+      isStaff: {type: Boolean, label: 'Is staff'}
+    }
+  });
+
+  App.tagForm = new App.FormView({
+    fields: {
+      title: {type: String, label: 'Title'}
+    }
+  });
+
+  App.menuView = new App.MenuView;
 
   App.postsView = new App.ListView({
     name: 'posts',
@@ -118,6 +261,7 @@ $(function() {
   App.posts = new App.Posts();
   App.tags = new App.Tags();
   App.router = new App.Router();
+  App.region = new App.Region();
 
   App.router.on('all', function(route) {
    App.menuView.select(route.split(':')[1]);
