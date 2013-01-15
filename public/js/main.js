@@ -153,14 +153,8 @@ App.FormView = Backbone.View.extend({
   tagName: 'form',
 
   initialize: function(options) {
-    this.name = options.name;
-
-    //TODO: Put this in a method
-    var title = this.make('h1', {}, options.name);
-    var submit = this.make('button', {type: 'submit', 'class': 'button'}, 'Submit');
-    this.$el.append(title);
-    _.each(options.fields, this.render, this);
-    this.$el.append(submit);
+    this.options = options;
+    this.render();
 
     this.collection.on('sync', function(collection, models, options) {
       if(!options.previousModels) {
@@ -185,13 +179,22 @@ App.FormView = Backbone.View.extend({
     return this.make('input', _.extend({type: 'checkbox', name: name}, attributes));
   },
 
-  render: function(options, name) {
+  render: function() {
+    var title = this.make('h1', {}, this.options.name);
+    var submit = this.make('button', {type: 'submit', 'class': 'button'}, 'Submit');
+    var fields = _.map(this.options.fields, this.renderField, this);
+
+    this.$el.append(title);
+    this.$el.append(fields);
+    this.$el.append(submit);
+  },
+
+  renderField: function(options, name) {
     var line = this.make('p');
     var label = this.make('label', {'for': name}, options.label + ':');
     var input = this[options.type.name](name, options.attributes || {});
 
-    $(line).append(label, input);
-    this.$el.append(line);
+    return $(line).append(label, input);
   },
 
   getField: function(key) {
