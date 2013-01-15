@@ -9,18 +9,7 @@ function getTmpl(name) {
   return App.templates[name];
 }
 
-var Model = Backbone.Model.extend({
-  defaults: function() {
-    return {
-      createdAt: new Date()
-    }
-  }
-});
-
-
 var Collection = Backbone.Collection.extend({
-
-  model: Model,
 
   initialize: function initialize() {
     this.on('sync', function() {
@@ -164,17 +153,19 @@ App.ListView = Backbone.View.extend({
 
 App.FormView = Backbone.View.extend({
 
+  tagName: 'form',
+
+  templateName: 'form',
+
   events: {
     'click button': 'onSubmit'
   },
-
-  tagName: 'form',
 
   initialize: function initialize(options) {
     var name = options.name;
     this.fields =  {};
     this.options = options;
-    this.render();
+    this.template = getTmpl(this.templateName);
 
     this.collection.on('sync', function(collection, resp, options) {
       if(!options.previousModels) {
@@ -185,6 +176,9 @@ App.FormView = Backbone.View.extend({
     this.collection.on('error', function() {
       console.error(this);
     });
+
+    this.render();
+    this.build();
   },
 
   Text: function Text(name, attributes) {
@@ -200,23 +194,25 @@ App.FormView = Backbone.View.extend({
   },
 
   render: function render() {
-    var title = this.make('h1', {}, this.options.name);
-    var submit = this.make('button', {type: 'submit', 'class': 'button'}, 'Submit');
-    var fields = _.map(this.options.fields, this.renderField, this);
-
-    this.$el.append(title);
-    this.$el.append.apply(this.$el, fields);
-    this.$el.append(submit);
+    var html = this.template({'name': this.options.name});
+    this.$el.html(html);
   },
 
-  renderField: function renderField(options, name) {
-    var line = this.make('p');
-    var label = this.make('label', {'for': name}, options.label + ':');
-    var input = this[options.type.name](name, options.attributes || {});
+  build: function build() {
+    var p, label, widget;
+    var container = this.$el.find('.fields');
 
-    this.fields[name] = $(input);
+    _.each(this.options.fields, function(options, name) {
+      p = this.make('p');
+      label = this.make('label', {'for': name}, options.label + ':');
+      widget = this[options.type.name](name, options.attributes || {});
 
-    return $(line).append(label, input);
+      p.appendChild(label);
+      p.appendChild(widget);
+      container.append(p);
+
+      this.fields[name] = $(widget);
+    }, this);
   },
 
   getField: function getField(key) {
@@ -224,10 +220,14 @@ App.FormView = Backbone.View.extend({
   },
 
   serialize: function serialize() {
-    var v, data = {};
-    _.each(this.fields, function(input, key) {
-      v = input.val();
-      if(input.attr('type') === 'checkbox') v = input.prop('checked');
+    var v, type, data = {};
+    _.each(this.fields, function(widget, key) {
+      type = widget.attr('type');
+      if(type === 'checkbox') {
+        v = widget.prop('checked');
+      } else {
+        v = widget.val();
+      }
       data[key] = v;
     });
     return  data;
