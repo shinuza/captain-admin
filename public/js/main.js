@@ -172,6 +172,7 @@ App.FormView = Backbone.View.extend({
 
   initialize: function initialize(options) {
     var name = options.name;
+    this.fields =  {};
     this.options = options;
     this.render();
 
@@ -213,6 +214,8 @@ App.FormView = Backbone.View.extend({
     var label = this.make('label', {'for': name}, options.label + ':');
     var input = this[options.type.name](name, options.attributes || {});
 
+    this.fields[name] = $(input);
+
     return $(line).append(label, input);
   },
 
@@ -221,13 +224,13 @@ App.FormView = Backbone.View.extend({
   },
 
   serialize: function serialize() {
-    var data = {},
-      arr = this.$el.serializeArray();
-
-    _.each(arr, function(field) {
-      data[field.name] = field.value;
+    var v, data = {};
+    _.each(this.fields, function(input, key) {
+      v = input.val();
+      if(input.attr('type') === 'checkbox') v = input.prop('checked');
+      data[key] = v;
     });
-    return data;
+    return  data;
   },
 
   unload: function unload() {
