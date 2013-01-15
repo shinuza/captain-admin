@@ -22,13 +22,13 @@ var Collection = Backbone.Collection.extend({
 
   model: Model,
 
-  initialize: function() {
+  initialize: function initialize() {
     this.on('sync', function() {
       this.synced = true;
     }, this);
   },
 
-  onSync: function(cb) {
+  onSync: function onSync(cb) {
     if(this.synced === true) {
       cb(this);
     } else {
@@ -81,6 +81,17 @@ App.ListView = Backbone.View.extend({
     this.columns = options.columns;
     this.collection = options.collection;
     this.tmpl = getTmpl(this.templateName);
+
+    this.collection.on('destroy', function (model) {
+      var view = this.get(model.id);
+      if(view) {
+        view.remove();
+      } else {
+        console.error('View for model %d not found', model.id);
+      }
+    }.bind(this));
+
+    this.collection.on('sync', this.render, this);
   },
 
   render: function render() {
@@ -106,7 +117,7 @@ App.ListView = Backbone.View.extend({
       .value();
   },
 
-  get: function(id) {
+  get: function get(id) {
     return this.$el.find('[data-id="' + id + '"]');
   },
 
@@ -119,12 +130,19 @@ App.ListView = Backbone.View.extend({
     App.router.navigate('new/' + this.name, {trigger: true});
   },
 
-  onDelete: function() {
-    this.trigger('delete', this.selected());
+  onDelete: function onDelete() {
+    this.selected().forEach(function(id) {
+      var model = this.collection.get(id);
+      if(model) {
+        model.destroy();
+      } else {
+        console.error('Model %d not found', id);
+      }
+    }, this);
     return false;
   },
 
-  onAll: function() {
+  onAll: function onAll() {
     this.all = !this.all;
     this.$el.find('tbody .select').each(function(index, input) {
       $(input).prop('checked', this.all);
@@ -152,44 +170,45 @@ App.FormView = Backbone.View.extend({
 
   tagName: 'form',
 
-  initialize: function(options) {
+  initialize: function initialize(options) {
+    var name = options.name;
     this.options = options;
     this.render();
 
-    this.collection.on('sync', function(collection, models, options) {
+    this.collection.on('sync', function(collection, resp, options) {
       if(!options.previousModels) {
-        App.router.navigate(this.name, {trigger: true});
+        App.router.navigate(name, {trigger: true});
       }
-    }, this);
+    });
 
     this.collection.on('error', function() {
       console.error(this);
     });
   },
 
-  Text: function(name, attributes) {
+  Text: function Text(name, attributes) {
     return this.make('textarea', _.extend({name: name}, attributes));
   },
 
-  String: function(name, attributes) {
+  String: function String(name, attributes) {
     return this.make('input', _.extend({type: 'text', name: name}, attributes));
   },
 
-  Boolean: function(name, attributes) {
+  Boolean: function Boolean(name, attributes) {
     return this.make('input', _.extend({type: 'checkbox', name: name}, attributes));
   },
 
-  render: function() {
+  render: function render() {
     var title = this.make('h1', {}, this.options.name);
     var submit = this.make('button', {type: 'submit', 'class': 'button'}, 'Submit');
     var fields = _.map(this.options.fields, this.renderField, this);
 
     this.$el.append(title);
-    this.$el.append(fields);
+    this.$el.append.apply(this.$el, fields);
     this.$el.append(submit);
   },
 
-  renderField: function(options, name) {
+  renderField: function renderField(options, name) {
     var line = this.make('p');
     var label = this.make('label', {'for': name}, options.label + ':');
     var input = this[options.type.name](name, options.attributes || {});
@@ -197,11 +216,11 @@ App.FormView = Backbone.View.extend({
     return $(line).append(label, input);
   },
 
-  getField: function(key) {
+  getField: function getField(key) {
     return this.$el.find('[name="' + key + '"]');
   },
 
-  serialize: function() {
+  serialize: function serialize() {
     var data = {},
       arr = this.$el.serializeArray();
 
@@ -211,12 +230,12 @@ App.FormView = Backbone.View.extend({
     return data;
   },
 
-  unload: function() {
+  unload: function unload() {
     this.model = null;
     this.el.reset();
   },
 
-  load: function(id) {
+  load: function load(id) {
     var model = this.model = this.collection.get(id);
     _.each(model.attributes, function(value, key) {
       var field = this.getField(key);
@@ -228,7 +247,7 @@ App.FormView = Backbone.View.extend({
     }, this);
   },
 
-  onSubmit: function() {
+  onSubmit: function onSubmit() {
     var data = this.serialize();
     if(!this.model) {
       this.model = this.collection.create(data);
@@ -271,13 +290,13 @@ App.Router = Backbone.Router.extend({
     "new/users":     "createUser"
   },
 
-  initialize: function() {
+  initialize: function initialize() {
     App.posts.fetch();
     App.tags.fetch();
     App.users.fetch();
   },
 
-  posts: function(id) {
+  posts: function posts(id) {
     if(id) {
       App.posts.onSync(function() {
         App.postForm.load(id);
@@ -289,7 +308,7 @@ App.Router = Backbone.Router.extend({
     }
   },
 
-  tags: function(id) {
+  tags: function tags(id) {
     if(id) {
       App.tags.onSync(function() {
         App.tagForm.load(id);
@@ -301,7 +320,7 @@ App.Router = Backbone.Router.extend({
     }
   },
 
-  users: function(id) {
+  users: function users(id) {
     if(id) {
       App.users.onSync(function() {
         App.userForm.load(id);
@@ -313,17 +332,17 @@ App.Router = Backbone.Router.extend({
     }
   },
 
-  createPost: function() {
+  createPost: function createPost() {
     App.postForm.unload();
     App.region.setContent(App.postForm);
   },
 
-  createTag: function() {
+  createTag: function createTag() {
     App.tagForm.unload();
     App.region.setContent(App.tagForm);
   },
 
-  createUser: function() {
+  createUser: function createUser() {
     App.userForm.unload();
     App.region.setContent(App.userForm);
   }
@@ -407,52 +426,9 @@ $(function() {
     ]
   });
 
-  App.router.on('all', function(route) {
+  App.router.on('all', function routeAll(route) {
    App.menuView.select(route.split(':')[1]);
   });
-
-  App.users.on('sync', function(collection) {
-    App.usersView.render();
-    App.usersView.on('delete', function(ids) {
-      ids.forEach(function(id) {
-        collection.get(id).destroy();
-      });
-    });
-  });
-
-  App.users.on('destroy', function(model) {
-    var view = App.usersView.get(model.id);
-    view.remove();
-  });
-
-  App.posts.on('sync', function(collection) {
-    App.postsView.render();
-    App.postsView.on('delete', function(ids) {
-      ids.forEach(function(id) {
-        collection.get(id).destroy();
-      });
-    });
-  });
-
-  App.posts.on('destroy', function(model) {
-    var view = App.postsView.get(model.id);
-    view.remove();
-  });
-
-  App.tags.on('sync', function(collection) {
-    App.tagsView.render();
-    App.tagsView.on('delete', function(ids) {
-      ids.forEach(function(id) {
-        collection.get(id).destroy();
-      });
-    });
-  });
-
-  App.tags.on('destroy', function(model) {
-    var view = App.tagsView.get(model.id);
-    view.remove();
-  });
-
 
   onResized();
   window.onresize = onResized;
