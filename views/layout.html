@@ -39,7 +39,7 @@
     <table id="{{name}}">
       <thead>
         <tr>
-          <th></th>
+          <th><input type="checkbox" class="all"></th>
           {% for column in columns %}
           <th class="{{name}}-{{column.value}}">{{column.label}}</th>
           {% endfor %}

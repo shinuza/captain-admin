@@ -62,6 +62,8 @@ App.Region = Backbone.View.extend({
 
 App.ListView = Backbone.View.extend({
 
+  all: false,
+
   tagName: 'div',
 
   templateName: 'list',
@@ -70,6 +72,7 @@ App.ListView = Backbone.View.extend({
     'click .edit': 'onClick',
     'click .delete': 'onDelete',
     'click .create': 'onCreate',
+    'click .all': 'onAll',
     'click .quick-check': 'onQuickCheck'
   },
 
@@ -119,6 +122,13 @@ App.ListView = Backbone.View.extend({
   onDelete: function() {
     this.trigger('delete', this.selected());
     return false;
+  },
+
+  onAll: function() {
+    this.all = !this.all;
+    this.$el.find('tbody .select').each(function(index, input) {
+      $(input).prop('checked', this.all);
+    }.bind(this));
   },
 
   onQuickCheck: function onQuickCheck(e) {
