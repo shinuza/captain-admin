@@ -58,6 +58,7 @@ App.ListView = Backbone.View.extend({
   events: {
     'click .edit': 'onClick',
     'click .delete': 'onDelete',
+    'click .create': 'onCreate',
     'click .quick-check': 'onQuickCheck'
   },
 
@@ -96,7 +97,11 @@ App.ListView = Backbone.View.extend({
 
   onClick: function onClick(e) {
     var el = $(e.currentTarget).parent();
-    App.router.navigate('posts/' + el.data('id'), {trigger: true});
+    App.router.navigate(this.name + '/' + el.data('id'), {trigger: true});
+  },
+
+  onCreate: function onCreate() {
+    App.router.navigate('new/' + this.name, {trigger: true});
   },
 
   onDelete: function() {
@@ -119,7 +124,21 @@ App.ListView = Backbone.View.extend({
 
 App.FormView = Backbone.View.extend({
 
+  events: {
+    'click button': 'onSubmit'
+  },
+
   tagName: 'form',
+
+  initialize: function(options) {
+    this.name = options.name;
+    var title = this.make('h1', {}, options.name);
+    var submit = this.make('button', {type: 'submit', 'class': 'button'}, 'Submit');
+
+    this.$el.append(title);
+    _.each(options.fields, this.render, this);
+    this.$el.append(submit);
+  },
 
   Text: function(name, attributes) {
     return this.make('textarea', _.extend({name: name}, attributes));
@@ -133,18 +152,9 @@ App.FormView = Backbone.View.extend({
     return this.make('input', _.extend({type: 'checkbox', name: name}, attributes));
   },
 
-  initialize: function(options) {
-    var title = this.make('h1', {}, options.name);
-    var submit = this.make('button', {type: 'submit', 'class': 'button'}, 'Submit');
-
-    this.$el.append(title);
-    _.each(options.fields, this.render, this);
-    this.$el.append(submit);
-  },
-
   render: function(options, name) {
     var line = this.make('p');
-    var label = this.make('label', {'for': name}, options.label);
+    var label = this.make('label', {'for': name}, options.label + ':');
     var input = this[options.type.name](name, options.attributes || {});
 
     $(line).append(label, input);
@@ -155,7 +165,23 @@ App.FormView = Backbone.View.extend({
     return this.$el.find('[name="' + key + '"]');
   },
 
-  load: function(model) {
+  serialize: function() {
+    var data = {},
+      arr = this.$el.serializeArray();
+
+    _.each(arr, function(field) {
+      data[field.name] = field.value;
+    });
+    return data;
+  },
+
+  unload: function() {
+    this.model = null;
+    this.el.reset();
+  },
+
+  load: function(id) {
+    var model = this.model = this.collection.get(id);
     _.each(model.attributes, function(value, key) {
       var field = this.getField(key);
       if(typeof value === 'boolean') {
@@ -164,6 +190,25 @@ App.FormView = Backbone.View.extend({
         field.val(value);
       }
     }, this);
+  },
+
+  onSubmit: function() {
+    var data = this.serialize();
+    if(!this.model) {
+      this.model = this.collection.create(data);
+    }
+    this.save(data);
+    return false;
+  },
+
+  save: function(data) {
+    this.model.on('sync', function() {
+      App.router.navigate(this.name, {trigger: true});
+    }, this);
+    this.model.on('error', function() {
+      console.error(this);
+    });
+    this.model.save(data);
   }
 
 });
@@ -188,12 +233,15 @@ App.MenuView = Backbone.View.extend({
 App.Router = Backbone.Router.extend({
 
   routes: {
-    "posts":       "posts",
-    "posts/:slug": "posts",
-    "tags":        "tags",
-    "tags/:slug":  "tags",
-    "users":       "users",
-    "users/:slug": "users"
+    "posts":        "posts",
+    "posts/:slug":  "posts",
+    "tags":         "tags",
+    "tags/:slug":   "tags",
+    "users":        "users",
+    "users/:slug":  "users",
+    "new/posts":     "createPost",
+    "new/tags":      "createTag",
+    "new/users":     "createUser"
   },
 
   initialize: function() {
@@ -205,10 +253,11 @@ App.Router = Backbone.Router.extend({
   posts: function(id) {
     if(id) {
       App.posts.onSync(function() {
-        App.postForm.load(App.posts.get(id));
+        App.postForm.load(id);
         App.region.setContent(App.postForm);
       });
     } else {
+      App.postsView.render();
       App.region.setContent(App.postsView);
     }
   },
@@ -216,10 +265,11 @@ App.Router = Backbone.Router.extend({
   tags: function(id) {
     if(id) {
       App.tags.onSync(function() {
-        App.tagForm.load(App.tags.get(id));
+        App.tagForm.load(id);
         App.region.setContent(App.tagForm);
       })
     } else {
+      App.tagsView.render();
       App.region.setContent(App.tagsView);
     }
   },
@@ -227,13 +277,30 @@ App.Router = Backbone.Router.extend({
   users: function(id) {
     if(id) {
       App.users.onSync(function() {
-        App.userForm.load(App.users.get(id));
+        App.userForm.load(id);
         App.region.setContent(App.userForm);
       });
     } else {
+      App.usersView.render();
       App.region.setContent(App.usersView);
     }
+  },
+
+  createPost: function() {
+    App.postForm.unload();
+    App.region.setContent(App.postForm);
+  },
+
+  createTag: function() {
+    App.tagForm.unload();
+    App.region.setContent(App.tagForm);
+  },
+
+  createUser: function() {
+    App.userForm.unload();
+    App.region.setContent(App.userForm);
   }
+
 
 });
 
@@ -252,7 +319,8 @@ $(function() {
   App.region = new App.Region();
 
   App.postForm = new App.FormView({
-    name: 'Posts',
+    name: 'posts',
+    collection: App.posts,
     fields: {
       title: {type: String, label: 'Title'},
       body: {type: Text, label: 'Body'},
@@ -261,7 +329,8 @@ $(function() {
   });
 
   App.userForm = new App.FormView({
-    name: 'Users',
+    name: 'users',
+    collection: App.users,
     fields: {
       username: {type: String, label: 'Username'},
       password: {type: String, label: 'Password', attributes: {'type': 'password'}},
@@ -273,7 +342,8 @@ $(function() {
   });
 
   App.tagForm = new App.FormView({
-    name: 'Tags',
+    name: 'tags',
+    collection: App.tags,
     fields: {
       title: {type: String, label: 'Title'}
     }
