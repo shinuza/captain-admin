@@ -9,7 +9,18 @@ function getTmpl(name) {
   return App.templates[name];
 }
 
+var Model = Backbone.Model.extend({
+  defaults: function() {
+    return {
+      createdAt: new Date()
+    }
+  }
+});
+
+
 var Collection = Backbone.Collection.extend({
+
+  model: Model,
 
   initialize: function() {
     this.on('sync', function() {
@@ -75,6 +86,7 @@ App.ListView = Backbone.View.extend({
       'columns': this.columns,
       'lines': this.collection.toJSON()
     };
+
     var html = this.tmpl(context);
     this.$el.empty().html(html);
   },
@@ -132,12 +144,23 @@ App.FormView = Backbone.View.extend({
 
   initialize: function(options) {
     this.name = options.name;
+
+    //TODO: Put this in a method
     var title = this.make('h1', {}, options.name);
     var submit = this.make('button', {type: 'submit', 'class': 'button'}, 'Submit');
-
     this.$el.append(title);
     _.each(options.fields, this.render, this);
     this.$el.append(submit);
+
+    this.collection.on('sync', function(collection, models, options) {
+      if(!options.previousModels) {
+        App.router.navigate(this.name, {trigger: true});
+      }
+    }, this);
+
+    this.collection.on('error', function() {
+      console.error(this);
+    });
   },
 
   Text: function(name, attributes) {
@@ -196,19 +219,10 @@ App.FormView = Backbone.View.extend({
     var data = this.serialize();
     if(!this.model) {
       this.model = this.collection.create(data);
+    } else {
+      this.model.save(data);
     }
-    this.save(data);
     return false;
-  },
-
-  save: function(data) {
-    this.model.on('sync', function() {
-      App.router.navigate(this.name, {trigger: true});
-    }, this);
-    this.model.on('error', function() {
-      console.error(this);
-    });
-    this.model.save(data);
   }
 
 });
