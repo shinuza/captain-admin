@@ -41,10 +41,26 @@ App.Tags = Collection.extend({
 
 App.Region = Backbone.View.extend({
 
-  el: '#content',
+  el: '#main',
+
+  initialize: function initialize() {
+    this.onResized();
+    $(window).on('resize', this.onResized.bind(this));
+  },
+
+  getHeight: function() {
+    var inner = window.innerHeight;
+    var doc = document.height;
+    return inner < doc ? inner : doc;
+  },
+
+  onResized: function onResized() {
+    this.$el.css('min-height',this.getHeight());
+  },
 
   setContent: function(view) {
     this.$el.empty().append(view.$el);
+    this.onResized();
   }
 
 });
@@ -290,7 +306,8 @@ App.Router = Backbone.Router.extend({
     "users/:slug":  "users",
     "new/posts":     "createPost",
     "new/tags":      "createTag",
-    "new/users":     "createUser"
+    "new/users":     "createUser",
+    "login":          "login"
   },
 
   initialize: function initialize() {
@@ -348,19 +365,16 @@ App.Router = Backbone.Router.extend({
   createUser: function createUser() {
     App.userForm.unload();
     App.region.setContent(App.userForm);
-  }
+  },
 
+  login: function login() {
+
+  }
 
 });
 
 
 $(function() {
-  var content = $('#content');
-
-  function onResized() {
-    content.css('height', document.height);
-  }
-
   App.users = new App.Users();
   App.posts = new App.Posts();
   App.tags = new App.Tags();
@@ -433,7 +447,5 @@ $(function() {
    App.menuView.select(route.split(':')[1]);
   });
 
-  onResized();
-  window.onresize = onResized;
   Backbone.history.start();
 });

@@ -6,20 +6,26 @@
     <link rel="stylesheet" href="css/main.css">
   </head>
   <body>
-    <div id="main">
-      <nav>
-        <a href="/" id="home"><span>Home</span></a>
-        <ul id="menu">
-          <li><a href="#dashboard">Dashboard<b class="icon32 home"></b></a></li>
-          <li><a href="#posts">Posts<b class="icon32 documents"></b></a></li>
-          <li><a href="#tags">Tags<b class="icon32 tags"></b></a></li>
-          <li><a href="#users">Users<b class="icon32 user"></b></a></li>
-          <li><a href="#settings">Settings<b class="icon32 gears"></b></a></li>
-        </ul>
-      </nav>
-      <div id="content"></div>
+    <nav>
+      <a href="/" id="home"><span>Home</span></a>
+      <ul id="menu">
+        <li><a href="#dashboard">Dashboard<b class="icon32 home"></b></a></li>
+        <li><a href="#posts">Posts<b class="icon32 documents"></b></a></li>
+        <li><a href="#tags">Tags<b class="icon32 tags"></b></a></li>
+        <li><a href="#users">Users<b class="icon32 user"></b></a></li>
+      </ul>
+    </nav>
+    <div id="content">
+      <div id="login">
+        <a href="#logout" class="box icon32 power"></a>
+        <a href="#settings" class="box icon32 gears"></a>
+        <a id="userbox" href="#login" class="box">
+          <b class="icon32 anonymous"></b>
+          <span>Anonymous</span>
+        </a>
+      </div>
+      <div id="main"></div>
     </div>
-
     <!-- SCRIPTS -->
     <script src="js/lib/underscore.js"></script>
     <script src="js/lib/zepto.js"></script>

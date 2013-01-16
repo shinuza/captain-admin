@@ -11,18 +11,23 @@
 
 /* Structure */
 
+a { color: #333; }
 body { font-family: 'Copse', serif; margin: 0; height: 100%; position: relative; }
 
-#content { position: relative; margin-left: 255px; border-left: #cdcbcb 1px solid; padding: 20px; }
+#main { padding: 0 20px; }
+#content { position: relative; margin-left: 255px; border-left: #cdcbcb 1px solid; }
 #home { background: url(img/logo.png) center center no-repeat; display: block; height: 182px; margin: 20px 0; }
 #home span { display: none; }
+
+.float-right { float: right; }
+.float-left { float: left; }
 
 /* Navigation */
 
 nav { position: absolute; top:0; bottom:0; left:0; height: 100%; width: 255px; background: #fbfbfb;}
 nav ul { list-style-type: none; padding: 0; background: #ff6018; }
 nav b { float: right; position: relative; top: -3px; }
-nav li a { display:block; height: 20px; padding: 15px 20px; border-top: 1px solid white; background: #fbfbfb; color: #333; }
+nav li a { display:block; height: 20px; padding: 15px 20px; border-top: 1px solid white; background: #fbfbfb; }
 nav li a.active { margin-left: 5px; border-color: #cdcbcb; border-style: solid; border-width: 1px 0 1px 0; background: white; position: relative; left: 1px; z-index: 2; }
 nav li a:hover { color: #ff6018 }
 
@@ -55,9 +60,15 @@ form textarea { height: 300px; }
 .button[type=submit] { text-indent: 0; min-width: 90px; padding-bottom: 5px; background: #ff6018; }
 .button[type=submit]:hover { background: #333; }
 
+#login { overflow: hidden; vertical-align: top; border-bottom: 1px solid #cdcbcb; }
+#login .box { min-height: 32px; padding: 5px; float: right; border-left: 1px solid #cdcbcb; }
+#login .box:last-child { border-left: 0; }
+
+#userbox { vertical-align: middle; }
+
 /* Icons */
 
-.icon32 { display: inline-block; background-image: url(img/icons-32.png); width: 32px; height: 32px; }
+.icon32 { display: inline-block; vertical-align: middle; background-image: url(img/icons-32.png); min-width: 32px; min-height: 32px; }
 
 .icon32.preview { background-position: 0 0; }
 .icon32.heart { background-position: -50px 0; }
@@ -65,11 +76,12 @@ form textarea { height: 300px; }
 .icon32.user { background-position: -142px 0; }
 .icon32.tags { background-position: -202px 0; }
 .icon32.forbidden { background-position: -250px 0; }
-.icon32.power { background-position: -300px 0; }
+.icon32.power { background-position: -295px 3px; }
 .icon32.documents { background-position: -347px 0; }
 .icon32.home { background-position: -400px 0; }
-.icon32.gears { background-position: -450px 0; }
+.icon32.gears { background-position: -445px 5px; }
 
+.icon32.anonymous { background-position: -400px -50px; }
 .icon32.left { background-position: 0 -50px; }
 .icon32.right { background-position: -50px -50px; }
 .icon32.top { background-position: -50px 0; }
