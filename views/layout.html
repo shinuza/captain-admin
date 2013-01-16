@@ -26,6 +26,9 @@
       </div>
       <div id="main"></div>
     </div>
+    <div id="shade" class="hidden"></div>
+    <div id="overlay" class="hidden">
+    </div>
     <!-- SCRIPTS -->
     <script src="js/lib/underscore.js"></script>
     <script src="js/lib/zepto.js"></script>
@@ -35,10 +38,10 @@
 
     <!-- TEMPLATES -->
     <script type="text/tmpl" id="list">
-      <h1>{{name|title}}</h1>
+      <h2>{{name|title}}</h2>
 
       <p>
-        <a href="#" class="button icon create">Create new</a>
+        <a href="#new/{{name}}" class="button icon create">Create new</a>
         <a href="#" class="button icon delete">Delete selected</a>
       </p>
 
@@ -87,7 +90,7 @@
     </script>
 
     <script type="text/html" id="form">
-      <h1>{{name|title}}</h1>
+      <h2>{{name|title}}</h2>
       <div class="fields"></div>
       <button type="submit" class="button">Submit</button>
     </script>

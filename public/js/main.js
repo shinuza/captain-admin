@@ -2,6 +2,10 @@ var App = {};
 
 App.templates = {};
 
+function noop() {
+
+}
+
 function getTmpl(name) {
   if(!App.templates[name]) {
     App.templates[name] = swig.compile($('#' + name).html(), {templateName: name});
@@ -37,6 +41,50 @@ App.Posts = Collection.extend({
 
 App.Tags = Collection.extend({
   url: 'http://localhost:8080/tags'
+});
+
+App.Auth = Backbone.Model.extend({
+  url: 'http://localhost:8080/users/login'
+});
+
+App.Overlay = Backbone.View.extend({
+
+  el: '#overlay',
+
+  initialize: function initialize() {
+    this.$shade = $('#shade');
+
+    this.onResized();
+    $(window).on('resize', this.onResized.bind(this));
+    this.$shade.on('click', function() {
+      this.hide();
+    }.bind(this));
+  },
+
+  setContent: function(view) {
+    this.$el.empty().append(view.$el);
+    this.onResized();
+  },
+
+  onResized: function onResized() {
+    var height = window.innerHeight;
+    var width = window.innerWidth;
+    this.$el.css({
+      left: width / 2 - this.$el.width() / 2,
+      top: height / 2 - this.$el.height() / 2
+    });
+  },
+
+  show: function() {
+    this.$el.removeClass('hidden');
+    this.$shade.removeClass('hidden');
+  },
+
+  hide: function() {
+    this.$el.addClass('hidden');
+    this.$shade.addClass('hidden');
+  }
+
 });
 
 App.Region = Backbone.View.extend({
@@ -76,7 +124,6 @@ App.ListView = Backbone.View.extend({
   events: {
     'click .edit': 'onClick',
     'click .delete': 'onDelete',
-    'click .create': 'onCreate',
     'click .all': 'onAll',
     'click .quick-check': 'onQuickCheck'
   },
@@ -131,10 +178,6 @@ App.ListView = Backbone.View.extend({
     App.router.navigate(this.name + '/' + el.data('id'), {trigger: true});
   },
 
-  onCreate: function onCreate() {
-    App.router.navigate('new/' + this.name, {trigger: true});
-  },
-
   onDelete: function onDelete() {
     this.selected().forEach(function(id) {
       var model = this.collection.get(id);
@@ -183,29 +226,39 @@ App.FormView = Backbone.View.extend({
     this.options = options;
     this.template = getTmpl(this.templateName);
 
-    this.collection.on('sync', function(collection, resp, options) {
-      if(!options.previousModels) {
-        App.router.navigate(name, {trigger: true});
-      }
-    });
+    this.onSuccess = options.onSuccess || noop;
+    this.onError = options.onError || noop;
 
-    this.collection.on('error', function() {
-      console.error(this);
-    });
+    if(this.collection) {
+      this.collection.on('sync', function(collection, resp, options) {
+        if(!options.previousModels) {
+          App.router.navigate(name, {trigger: true});
+        }
+      });
+
+      this.collection.on('error', function() {
+        console.error(this);
+      });
+    }
+
+    if(this.model) {
+      this.model.on('sync', this.onSuccess, this);
+      this.model.on('error', this.onError, this);
+    }
 
     this.render();
     this.build();
   },
 
-  Text: function Text(name, attributes) {
+  text: function Text(name, attributes) {
     return this.make('textarea', _.extend({name: name}, attributes));
   },
 
-  String: function String(name, attributes) {
+  string: function String(name, attributes) {
     return this.make('input', _.extend({type: 'text', name: name}, attributes));
   },
 
-  Boolean: function Boolean(name, attributes) {
+  boolean: function Boolean(name, attributes) {
     return this.make('input', _.extend({type: 'checkbox', name: name}, attributes));
   },
 
@@ -221,7 +274,7 @@ App.FormView = Backbone.View.extend({
     _.each(this.options.fields, function(options, name) {
       p = this.make('p');
       label = this.make('label', {'for': name}, options.label + ':');
-      widget = this[options.type.name](name, options.attributes || {});
+      widget = this[options.type](name, options.attributes || {});
 
       p.appendChild(label);
       p.appendChild(widget);
@@ -368,26 +421,49 @@ App.Router = Backbone.Router.extend({
   },
 
   login: function login() {
-
+    App.overlay.setContent(App.loginForm);
+    App.overlay.show();
   }
 
 });
 
 
 $(function() {
-  App.users = new App.Users();
-  App.posts = new App.Posts();
-  App.tags = new App.Tags();
-  App.router = new App.Router();
-  App.region = new App.Region();
+  App.users = new App.Users;
+  App.posts = new App.Posts;
+  App.tags = new App.Tags;
+
+  App.router = new App.Router;
+  App.region = new App.Region;
+  App.overlay = new App.Overlay;
+
+  // Router
+
+  App.router.on('all', function routeAll(route) {
+    App.menuView.select(route.split(':')[1]);
+  });
+
+  // Form
+
+  App.loginForm = new App.FormView({
+    name: 'login',
+    model: new App.Auth,
+    fields: {
+      username: {type: 'string', label: 'Username'},
+      password: {type: 'string', label: 'Password', attributes: {'type': 'password'}}
+    },
+    onSuccess: function() {
+      App.overlay.hide();
+    }
+  });
 
   App.postForm = new App.FormView({
     name: 'posts',
     collection: App.posts,
     fields: {
-      title: {type: String, label: 'Title'},
-      body: {type: Text, label: 'Body'},
-      published: {type: Boolean, label: 'Published'}
+      title: {type: 'string', label: 'Title'},
+      body: {type: 'text', label: 'Body'},
+      published: {type: 'boolean', label: 'Published'}
     }
   });
 
@@ -395,12 +471,12 @@ $(function() {
     name: 'users',
     collection: App.users,
     fields: {
-      username: {type: String, label: 'Username'},
-      password: {type: String, label: 'Password', attributes: {'type': 'password'}},
-      firstname: {type: String, label: 'First name'},
-      lastname: {type: String, label: 'Last name'},
-      email: {type: String, label: 'Email'},
-      isStaff: {type: Boolean, label: 'Is staff'}
+      username: {type: 'string', label: 'Username'},
+      password: {type: 'string', label: 'Password', attributes: {'type': 'password'}},
+      firstname: {type: 'string', label: 'First name'},
+      lastname: {type: 'string', label: 'Last name'},
+      email: {type: 'string', label: 'Email'},
+      isStaff: {type: 'boolean', label: 'Is staff'}
     }
   });
 
@@ -408,9 +484,11 @@ $(function() {
     name: 'tags',
     collection: App.tags,
     fields: {
-      title: {type: String, label: 'Title'}
+      title: {type: 'string', label: 'Title'}
     }
   });
+
+  // Views
 
   App.menuView = new App.MenuView;
 
@@ -441,10 +519,6 @@ $(function() {
       {'label': 'Created at', 'value': 'createdAt', 'type': 'date'},
       {'label': 'Is staff', 'value': 'isStaff', 'type': 'bool'}
     ]
-  });
-
-  App.router.on('all', function routeAll(route) {
-   App.menuView.select(route.split(':')[1]);
   });
 
   Backbone.history.start();
