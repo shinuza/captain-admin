@@ -251,15 +251,15 @@ App.FormView = Backbone.View.extend({
   },
 
   text: function Text(name, attributes) {
-    return this.make('textarea', _.extend({name: name}, attributes));
+    return $('<textarea/>', _.extend({name: name}, attributes));
   },
 
   string: function String(name, attributes) {
-    return this.make('input', _.extend({type: 'text', name: name}, attributes));
+    return $('<input/>', _.extend({type: 'text', name: name}, attributes));
   },
 
   boolean: function Boolean(name, attributes) {
-    return this.make('input', _.extend({type: 'checkbox', name: name}, attributes));
+    return $('<input/>', _.extend({type: 'checkbox', name: name}, attributes));
   },
 
   render: function render() {
@@ -272,15 +272,14 @@ App.FormView = Backbone.View.extend({
     var container = this.$el.find('.fields');
 
     _.each(this.options.fields, function(options, name) {
-      p = this.make('p');
-      label = this.make('label', {'for': name}, options.label + ':');
+      p = $('<p></p>');
+      label = $('<label/>', {'for': name}).html(options.label + ':');
       widget = this[options.type](name, options.attributes || {});
 
-      p.appendChild(label);
-      p.appendChild(widget);
+      p.append(label, widget);
       container.append(p);
 
-      this.fields[name] = $(widget);
+      this.fields[name] = widget;
     }, this);
   },
 
