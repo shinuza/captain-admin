@@ -43,8 +43,12 @@ App.Tags = Collection.extend({
   url: 'http://localhost:8080/tags'
 });
 
-App.Auth = Backbone.Model.extend({
-  url: 'http://localhost:8080/users/login'
+App.User = Backbone.Model.extend({
+  url: 'http://localhost:8080/users/login',
+
+  isAnonymous: function isAnonymous() {
+    return this.get('id') !== undefined;
+  }
 });
 
 App.Overlay = Backbone.View.extend({
@@ -347,6 +351,32 @@ App.MenuView = Backbone.View.extend({
 
 });
 
+App.UserView = Backbone.View.extend({
+
+  el: '#userbox',
+
+  initialize: function initialize() {
+    this.$img = this.$el.find('.img');
+    this.$name = this.$el.find('.name');
+
+    this.listenTo(this.model, 'change:imageUrl', this.renderImage);
+    this.listenTo(this.model, 'change:username', this.renderName);
+  },
+
+  renderImage: function renderImage(model, value) {
+    var background = value ? 'url(' + value +')' : '';
+    this.$img.css('background', background);
+  },
+
+  renderName: function renderName(model, value) {
+    this.$name.html(value || 'Anonymous');
+  }
+
+});
+
+
+
+
 App.Router = Backbone.Router.extend({
 
   routes: {
@@ -359,7 +389,8 @@ App.Router = Backbone.Router.extend({
     "new/posts":     "createPost",
     "new/tags":      "createTag",
     "new/users":     "createUser",
-    "login":          "login"
+    "login":         "login",
+    "logout":        "logout"
   },
 
   initialize: function initialize() {
@@ -422,6 +453,10 @@ App.Router = Backbone.Router.extend({
   login: function login() {
     App.overlay.setContent(App.loginForm);
     App.overlay.show();
+  },
+
+  logout: function logout() {
+    App.user.clear();
   }
 
 });
@@ -431,6 +466,7 @@ $(function() {
   App.users = new App.Users;
   App.posts = new App.Posts;
   App.tags = new App.Tags;
+  App.user = new App.User;
 
   App.router = new App.Router;
   App.region = new App.Region;
@@ -446,7 +482,7 @@ $(function() {
 
   App.loginForm = new App.FormView({
     name: 'login',
-    model: new App.Auth,
+    model: App.user,
     fields: {
       username: {type: 'string', label: 'Username'},
       password: {type: 'string', label: 'Password', attributes: {'type': 'password'}}
@@ -489,6 +525,7 @@ $(function() {
 
   // Views
 
+  App.userView = new App.UserView({model: App.user});
   App.menuView = new App.MenuView;
 
   App.postsView = new App.ListView({
