@@ -1,10 +1,21 @@
-var express = require('express'), app = express();
+var express = require('express'),
+    app = express();
 
-app.use(express.static(__dirname + '/public'));
-app.use(express.static('/Users/shinuza/Code/captainjs-media/')); //TODO: Put this in setting
+app.on('mount', function() {
+  var settings = require('captainjs-core').settings;
 
-app.get('/', function(req, res){
-  res.sendfile(__dirname + '/views/layout.html');
+  app.use(express.static(__dirname + '/public'));
+  app.use(express.static(settings.get('MEDIA_ROOT')));
+
+  app.get('/', function(req, res){
+    res.sendfile(__dirname + '/views/layout.html');
+  });
 });
 
-app.listen(9000);
+if(require.main === module) {
+  app.listen(9000, function() {
+    console.log('Listening at http://localhost:9000');
+  });
+}
+
+module.exports = app;

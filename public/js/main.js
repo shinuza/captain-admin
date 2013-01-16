@@ -32,19 +32,23 @@ var Collection = Backbone.Collection.extend({
 });
 
 App.Users = Collection.extend({
-  url: 'http://localhost:8080/users'
+  //TODO: Use config
+  url: '/users'
 });
 
 App.Posts = Collection.extend({
-  url: 'http://localhost:8080/posts'
+  //TODO: Use config
+  url: '/posts'
 });
 
 App.Tags = Collection.extend({
-  url: 'http://localhost:8080/tags'
+  //TODO: Use config
+  url: '/tags'
 });
 
 App.Session = Backbone.Model.extend({
-  url: 'http://localhost:8080/users/session',
+  //TODO: Use config
+  url: '/session',
 
   isAnonymous: function isAnonymous() {
     return this.get('id') !== undefined;
