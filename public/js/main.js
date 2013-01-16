@@ -43,8 +43,8 @@ App.Tags = Collection.extend({
   url: 'http://localhost:8080/tags'
 });
 
-App.User = Backbone.Model.extend({
-  url: 'http://localhost:8080/users/login',
+App.Session = Backbone.Model.extend({
+  url: 'http://localhost:8080/users/session',
 
   isAnonymous: function isAnonymous() {
     return this.get('id') !== undefined;
@@ -456,7 +456,8 @@ App.Router = Backbone.Router.extend({
   },
 
   logout: function logout() {
-    App.user.clear();
+    App.session.clear();
+    App.session.destroy();
   }
 
 });
@@ -466,7 +467,7 @@ $(function() {
   App.users = new App.Users;
   App.posts = new App.Posts;
   App.tags = new App.Tags;
-  App.user = new App.User;
+  App.session = new App.Session;
 
   App.router = new App.Router;
   App.region = new App.Region;
@@ -482,7 +483,7 @@ $(function() {
 
   App.loginForm = new App.FormView({
     name: 'login',
-    model: App.user,
+    model: App.session,
     fields: {
       username: {type: 'string', label: 'Username'},
       password: {type: 'string', label: 'Password', attributes: {'type': 'password'}}
@@ -525,7 +526,7 @@ $(function() {
 
   // Views
 
-  App.userView = new App.UserView({model: App.user});
+  App.userView = new App.UserView({model: App.session});
   App.menuView = new App.MenuView;
 
   App.postsView = new App.ListView({
