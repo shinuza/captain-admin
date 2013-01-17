@@ -14,7 +14,7 @@
 a { color: #333; }
 body { font-family: 'Copse', serif; margin: 0; height: 100%; position: relative; }
 
-#main { padding: 0 20px; }
+#main { padding: 20px; }
 #content { position: relative; margin-left: 255px; border-left: #cdcbcb 1px solid; }
 #home { background: url(img/logo.png) center center no-repeat; display: block; height: 182px; margin: 20px 0; }
 #home span { display: none; }
@@ -33,7 +33,7 @@ nav li a:hover { color: #ff6018 }
 
 /* Typo */
 a { text-decoration: none; }
-h2 { opacity: .2; position: relative; margin: 0; }
+h1 { opacity: .2; position: relative; margin: 0; }
 
 /* Table */
 
