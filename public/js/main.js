@@ -120,8 +120,13 @@ App.Region = Backbone.View.extend({
   },
 
   setContent: function(view) {
-    this.$el.empty().append(view.$el);
-    this.onResized();
+    this.$el.empty();
+    if(typeof view === 'string') {
+      this.$el.html(view);
+    } else {
+      this.$el.append(view.$el);
+      this.onResized();
+    }
   }
 
 });
@@ -404,17 +409,21 @@ App.Router = Backbone.Router.extend({
     "tags/:slug":   "tags",
     "users":        "users",
     "users/:slug":  "users",
-    "new/posts":     "createPost",
-    "new/tags":      "createTag",
-    "new/users":     "createUser",
-    "login":         "login",
-    "logout":        "logout"
+    "new/posts":    "createPost",
+    "new/tags":     "createTag",
+    "new/users":    "createUser",
+    "login":        "login",
+    "logout":       "logout",
+    "dashboard":    "dashboard"
   },
 
   initialize: function initialize() {
+    //TODO: Don't do this
     App.posts.fetch();
     App.tags.fetch();
     App.users.fetch();
+
+    this.navigate('dashboard', {trigger: true});
   },
 
   posts: function posts(id) {
@@ -477,6 +486,10 @@ App.Router = Backbone.Router.extend({
     App.session.destroy();
     App.session.clear();
     App.router.navigate('dashboard', {trigger: true});
+  },
+
+  dashboard: function dashboard() {
+    App.region.setContent('<h1>Dashboard</h1>');
   }
 
 });
@@ -487,9 +500,9 @@ $(function() {
   App.tags = new App.Tags;
   App.session = new App.Session;
 
-  App.router = new App.Router;
   App.region = new App.Region;
   App.overlay = new App.Overlay;
+  App.router = new App.Router;
 
   // Router
 
