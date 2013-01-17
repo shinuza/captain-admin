@@ -418,11 +418,6 @@ App.Router = Backbone.Router.extend({
   },
 
   initialize: function initialize() {
-    //TODO: Don't do this
-    App.posts.fetch();
-    App.tags.fetch();
-    App.users.fetch();
-
     this.navigate('dashboard', {trigger: true});
   },
 
@@ -433,7 +428,7 @@ App.Router = Backbone.Router.extend({
         App.region.setContent(App.postForm);
       });
     } else {
-      App.postsView.render();
+      App.posts.fetch();
       App.region.setContent(App.postsView);
     }
   },
@@ -445,7 +440,7 @@ App.Router = Backbone.Router.extend({
         App.region.setContent(App.tagForm);
       })
     } else {
-      App.tagsView.render();
+      App.tags.fetch();
       App.region.setContent(App.tagsView);
     }
   },
@@ -457,7 +452,7 @@ App.Router = Backbone.Router.extend({
         App.region.setContent(App.userForm);
       });
     } else {
-      App.usersView.render();
+      App.users.fetch();
       App.region.setContent(App.usersView);
     }
   },
