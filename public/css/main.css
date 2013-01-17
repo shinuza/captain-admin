@@ -64,7 +64,7 @@ form textarea { height: 300px; }
 #login .box { min-height: 32px; padding: 5px; float: right; border-left: 1px solid #cdcbcb; }
 #login .box:last-child { border-left: 0; }
 
-#shade { position: absolute; top:0; left:0; right: 0; bottom: 0; background: #000; z-index: 9; opacity: 0.4;
+#shade { position: absolute; top:0; left:0; right: 0; bottom: 0; background: #fff; z-index: 9; opacity: 1;
   -moz-transition: all 0.7s;
   -webkit-transition: all 0.7s;
   -ms-transition: all 0.7s;
@@ -72,7 +72,7 @@ form textarea { height: 300px; }
   transition: all 0.7s;
 }
 #shade.hidden { opacity: 0; visibility: hidden; }
-#overlay { position: absolute; z-index: 10; background: #fefefe; border: 1px solid #ccc; padding: 10px 30px; margin: 0 auto; box-shadow: 0 0 15px 0 #000;
+#overlay { position: absolute; z-index: 10; background: #fefefe; border: 1px solid #ccc; padding: 10px 30px; margin: 0 auto; box-shadow: 0 0 15px 0 #ccc;
   -moz-transition: top 0.7s;
   -webkit-transition: top 0.7s;
   -ms-transition: top 0.7s;
