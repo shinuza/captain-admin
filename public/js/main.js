@@ -38,7 +38,7 @@ App.Users = Collection.extend({
 
 App.Posts = Collection.extend({
   //TODO: Use config
-  url: '/posts'
+  url: '/posts/?force=true'
 });
 
 App.Tags = Collection.extend({
