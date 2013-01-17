@@ -48,7 +48,7 @@ App.Tags = Collection.extend({
 
 App.Session = Backbone.Model.extend({
   //TODO: Use config
-  url: '/session',
+  url: '/users/session',
 
   isAnonymous: function isAnonymous() {
     return this.get('id') !== undefined;
