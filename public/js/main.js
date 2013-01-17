@@ -54,7 +54,8 @@ App.Session = Backbone.Model.extend({
 
   //TODO: Use config
   url: function() {
-    return '/sessions/' + this.get('id');
+    var s = this.get('id') || '';
+    return '/sessions/' + s;
   },
 
   isAnonymous: function isAnonymous() {
@@ -71,9 +72,6 @@ App.Overlay = Backbone.View.extend({
 
     this.onResized();
     $(window).on('resize', this.onResized.bind(this));
-    this.$shade.on('click', function() {
-      this.hide();
-    }.bind(this));
   },
 
   setContent: function(view) {
@@ -372,6 +370,8 @@ App.UserView = Backbone.View.extend({
 
     this.listenTo(this.model, 'change:imageUrl', this.renderImage);
     this.listenTo(this.model, 'change:username', this.renderName);
+    this.listenTo(this.model, 'error', this.onError);
+    this.listenTo(this.model, 'destroy', this.onDestroy);
   },
 
   renderImage: function renderImage(model, value) {
@@ -381,11 +381,18 @@ App.UserView = Backbone.View.extend({
 
   renderName: function renderName(model, value) {
     this.$name.html(value || 'Anonymous');
+  },
+
+  onError: function() {
+    App.router.navigate('login', {trigger: true});
+  },
+
+  onDestroy: function() {
+    var l = document.location;
+    l.href = l.host + l.pathname;
   }
 
 });
-
-
 
 
 App.Router = Backbone.Router.extend({
@@ -469,10 +476,10 @@ App.Router = Backbone.Router.extend({
   logout: function logout() {
     App.session.destroy();
     App.session.clear();
+    App.router.navigate('dashboard', {trigger: true});
   }
 
 });
-
 
 $(function() {
   App.users = new App.Users;
@@ -487,7 +494,10 @@ $(function() {
   // Router
 
   App.router.on('all', function routeAll(route) {
-    App.menuView.select(route.split(':')[1]);
+    var name = route.split(':')[1];
+    if(name) {
+      App.menuView.select(name);
+    }
   });
 
   // Form
@@ -501,6 +511,7 @@ $(function() {
     },
     onSuccess: function() {
       App.overlay.hide();
+      App.router.navigate('dashboard', {trigger: true});
     }
   });
 
@@ -568,7 +579,6 @@ $(function() {
       {'label': 'Is staff', 'value': 'isStaff', 'type': 'bool'}
     ]
   });
-
-  App.session.fetch();
   Backbone.history.start();
+  App.session.fetch();
 });
