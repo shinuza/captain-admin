@@ -47,8 +47,15 @@ App.Tags = Collection.extend({
 });
 
 App.Session = Backbone.Model.extend({
+
+  defaults: {
+    id: 'current'
+  },
+
   //TODO: Use config
-  url: '/users/session',
+  url: function() {
+    return '/sessions/' + this.get('id');
+  },
 
   isAnonymous: function isAnonymous() {
     return this.get('id') !== undefined;
@@ -460,8 +467,8 @@ App.Router = Backbone.Router.extend({
   },
 
   logout: function logout() {
-    App.session.clear();
     App.session.destroy();
+    App.session.clear();
   }
 
 });
@@ -562,5 +569,6 @@ $(function() {
     ]
   });
 
+  App.session.fetch();
   Backbone.history.start();
 });
