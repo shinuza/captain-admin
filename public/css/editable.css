@@ -1,0 +1,33 @@
+.editable {
+    overflow: hidden;
+    width: 50%;
+    border-radius: 3px;
+    background: #fafafa;
+    min-height: 32px;
+    line-height: 30px;
+    border: 1px solid #ddd;
+    padding: 3px;
+    list-style-type: none;
+}
+.editable:focus {
+    outline: 0;
+}
+.tag input {
+    background: transparent;
+    border: 0;
+    height: 30px;
+    line-height:28px;
+    outline: 0;
+    font-family: inherit;
+    font-size: inherit;
+}
+.tag.old {
+    background: #eee;
+    border: 1px solid #bbb;
+    padding: 0 5px;
+}
+.tag {
+    margin: 2px;
+    float: left;
+    border-radius: 5px;
+}
