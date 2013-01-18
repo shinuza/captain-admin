@@ -1,10 +1,7 @@
 .editable {
     overflow: hidden;
-    width: 50%;
-    border-radius: 3px;
     background: #fafafa;
-    min-height: 32px;
-    line-height: 30px;
+    line-height: 38px;
     border: 1px solid #ddd;
     padding: 3px;
     list-style-type: none;

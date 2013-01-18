@@ -57,12 +57,14 @@ form textarea { height: 300px; }
 .button.icon { display: inline-block; background-image: url(img/icons-16.png); width: 16px; height: 16px; }
 .button.icon.create { background-position: 8px 8px; }
 .button.icon.delete { background-position: 8px -92px; }
-.button[type=submit] { text-indent: 0; min-width: 90px; padding-bottom: 5px; background: #ff6018; }
-.button[type=submit]:hover { background: #333; }
+.button[type=submit], .button.submit { min-width: 90px; padding-bottom: 5px; background: #ff6018; }
+.button[type=submit]:hover, .button.submit:hover { background: #333; }
 
 #login { overflow: hidden; vertical-align: top; border-bottom: 1px solid #cdcbcb; }
 #login .box { min-height: 32px; padding: 5px; float: right; border-left: 1px solid #cdcbcb; }
 #login .box:last-child { border-left: 0; }
+
+.editable { width: 95%; border: 3px solid #cdcbcb !important; margin-top: 2px; }
 
 #shade { position: absolute; top:0; left:0; right: 0; bottom: 0; background: #fff; z-index: 9; opacity: 1;
   -moz-transition: all 0.7s;

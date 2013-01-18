@@ -39,6 +39,13 @@ $(function() {
       title: {type: 'string', label: 'Title'},
       body: {type: 'text', label: 'Body'},
       published: {type: 'boolean', label: 'Published'}
+    },
+    onRender: function() {
+      var $label = $('<div/>', {text:'Tags:'});
+      var $ul = $('<ul/>', {'class': 'editable'});
+      this.addWidget($label);
+      this.addWidget($ul);
+      $($ul).editable();
     }
   });
 

@@ -4,7 +4,7 @@ function Editable(el) {
   this.$input = $('<input/>', {type: 'text'});
   this.$inputContainer.append(this.$input);
 
-  this.$input.keyup(function(e) {
+  this.$input.on('keyup', function(e) {
     var text = this.$input.val();
     if(e.keyCode === 13 && text !== '') {
       this.appendNew(text);

@@ -5,7 +5,7 @@ App.FormView = Backbone.View.extend({
   templateName: 'form',
 
   events: {
-    'click button': 'onSubmit'
+    'click .submit': 'onSubmit'
   },
 
   initialize: function initialize(options) {
@@ -16,6 +16,7 @@ App.FormView = Backbone.View.extend({
 
     this.onSuccess = options.onSuccess || noop;
     this.onError = options.onError || noop;
+    this.onRender = options.onRender || noop;
 
     if(this.collection) {
       this.collection.on('sync', function(collection, resp, options) {
@@ -35,6 +36,7 @@ App.FormView = Backbone.View.extend({
     }
 
     this.render();
+    this.onRender();
     this.build();
   },
 
@@ -69,6 +71,10 @@ App.FormView = Backbone.View.extend({
 
       this.fields[name] = widget;
     }, this);
+  },
+
+  addWidget: function addWidget(el) {2
+    this.$el.find('.form-widgets').append(el);
   },
 
   getField: function getField(key) {
