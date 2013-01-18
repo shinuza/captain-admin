@@ -24,7 +24,7 @@ App.Region = Backbone.View.extend({
     } else {
       this.$el.append(view.$el);
       this.onResized();
+      view.trigger('display', view);
     }
   }
-
 });

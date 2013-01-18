@@ -14,9 +14,9 @@ App.FormView = Backbone.View.extend({
     this.options = options;
     this.template = getTmpl(this.templateName);
 
+    this.onRender = options.onRender || noop;
     this.onSuccess = options.onSuccess || noop;
     this.onError = options.onError || noop;
-    this.onRender = options.onRender || noop;
 
     if(this.collection) {
       this.collection.on('sync', function(collection, resp, options) {
@@ -55,6 +55,7 @@ App.FormView = Backbone.View.extend({
   render: function render() {
     var html = this.template({'name': this.options.name});
     this.$el.html(html);
+    this.trigger('render');
   },
 
   build: function build() {
@@ -110,6 +111,7 @@ App.FormView = Backbone.View.extend({
         field.val(value);
       }
     }, this);
+    this.trigger('load', model);
   },
 
   onSubmit: function onSubmit() {
