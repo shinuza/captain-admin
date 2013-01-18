@@ -1,8 +1,9 @@
-function Editable(el) {
+function Editable(el, options) {
   this.$el = $(el);
+  this.options = options;
+
   this.$inputContainer = $('<li/>', {'class': 'tag new'});
   this.$input = $('<input/>', {type: 'text'});
-  this.$inputContainer.append(this.$input);
 
   this.$input.keyup(function(e) {
     var text = this.$input.val();
@@ -20,14 +21,14 @@ function Editable(el) {
     return false;
   }.bind(this));
 
+  this.$inputContainer.append(this.$input);
   this.$el.append(this.$inputContainer);
 }
 
 Editable.prototype = {
 
-  appendNew: function appendNew(text) {
-    var old = $('<li/>', {'class': 'tag old'}, text);
-    old.html(text);
+  appendNew: function appendNew(text, attributes) {
+    var old = $('<li/>', _.extend({'class': 'tag old', text: text}, attributes));
     old.insertBefore(this.$inputContainer);
   },
 
@@ -43,8 +44,6 @@ Editable.prototype = {
 };
 
 
-$.fn.editable = function editable() {
-  return this.map(function(index, element) {
-    new Editable(element);
-  });
+$.fn.editable = function editable(options) {
+  return new Editable(this, options);
 };
