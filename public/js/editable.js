@@ -4,7 +4,7 @@ function Editable(el) {
   this.$input = $('<input/>', {type: 'text'});
   this.$inputContainer.append(this.$input);
 
-  this.$input.on('keyup', function(e) {
+  this.$input.keyup(function(e) {
     var text = this.$input.val();
     if(e.keyCode === 13 && text !== '') {
       this.appendNew(text);
@@ -13,6 +13,11 @@ function Editable(el) {
     if(e.keyCode === 8 && text === '') {
       this.removeLast();
     }
+  }.bind(this));
+
+  this.$el.click(function() {
+    this.$input.focus();
+    return false;
   }.bind(this));
 
   this.$el.append(this.$inputContainer);
