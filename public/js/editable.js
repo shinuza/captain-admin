@@ -38,14 +38,17 @@ Editable.prototype = {
 
   serialize: function serialize() {
     var $el;
-    return [].map.call(this.$el.find('.old'), function(el) {
+    return [].map.call(this.getElements(), function(el) {
       $el = $(el);
       return {
         title: $el.html(),
-        id: $el.data('id'),
-        element: $el
+        id: $el.data('id')
       };
     });
+  },
+
+  getElements: function() {
+    return this.$el.find('.old');
   },
 
   load: function(arr) {
@@ -57,7 +60,7 @@ Editable.prototype = {
   },
 
   clear: function() {
-    this.$el.find('.old').remove();
+    this.getElements().remove();
   }
 };
 
