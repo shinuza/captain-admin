@@ -1,58 +1,31 @@
 App.Router = Backbone.Router.extend({
 
   routes: {
-    "posts":        "posts",
-    "posts/:slug":  "posts",
-    "tags":         "tags",
-    "tags/:slug":   "tags",
-    "users":        "users",
-    "users/:slug":  "users",
-    "new/posts":    "createPost",
-    "new/tags":     "createTag",
-    "new/users":    "createUser",
-    "login":        "login",
-    "logout":       "logout",
-    "dashboard":    "dashboard"
+    "posts":          "listPosts",
+    "posts/new" :     "createPost",
+    "posts/edit/:id": "editPost",
+
+    "tags":           "listTags",
+    "tags/new":       "createTag",
+    "tags/edit/:id":  "editTag",
+
+    "users":          "listUsers",
+    "users/new":      "createUser",
+    "users/edit/:id": "editUser",
+
+    "login":          "login",
+    "logout":         "logout",
+    "dashboard":      "dashboard"
   },
 
   initialize: function initialize() {
     this.navigate('dashboard', {trigger: true});
   },
 
-  posts: function posts(id) {
-    if(id) {
-      App.posts.onSync(function() {
-        App.postForm.load(id);
-        App.region.setContent(App.postForm);
-      });
-    } else {
-      App.posts.fetch();
-      App.region.setContent(App.postsView);
-    }
-  },
-
-  tags: function tags(id) {
-    if(id) {
-      App.tags.onSync(function() {
-        App.tagForm.load(id);
-        App.region.setContent(App.tagForm);
-      })
-    } else {
-      App.tags.fetch();
-      App.region.setContent(App.tagsView);
-    }
-  },
-
-  users: function users(id) {
-    if(id) {
-      App.users.onSync(function() {
-        App.userForm.load(id);
-        App.region.setContent(App.userForm);
-      });
-    } else {
-      App.users.fetch();
-      App.region.setContent(App.usersView);
-    }
+  listPosts: function listPosts() {
+    App.postForm.unload();
+    App.posts.fetch();
+    App.region.setContent(App.postsView);
   },
 
   createPost: function createPost() {
@@ -60,13 +33,43 @@ App.Router = Backbone.Router.extend({
     App.region.setContent(App.postForm);
   },
 
+  editPost: function editPost(id) {
+    App.postForm.unload();
+    App.postForm.load(id);
+    App.region.setContent(App.postForm);
+  },
+
+  listTags: function listTags() {
+    App.tagForm.unload();
+    App.tags.fetch();
+    App.region.setContent(App.tagsView);
+  },
+
   createTag: function createTag() {
     App.tagForm.unload();
     App.region.setContent(App.tagForm);
   },
 
+  editTag: function editTag(id) {
+    App.tagForm.unload();
+    App.tagForm.load(id);
+    App.region.setContent(App.tagForm);
+  },
+
+  users: function users() {
+    App.userForm.unload();
+    App.users.fetch();
+    App.region.setContent(App.usersView);
+  },
+
   createUser: function createUser() {
     App.userForm.unload();
+    App.region.setContent(App.userForm);
+  },
+
+  editUser: function editUser(id) {
+    App.userForm.unload();
+    App.userForm.load(id);
     App.region.setContent(App.userForm);
   },
 

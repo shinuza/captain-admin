@@ -60,7 +60,7 @@ App.ListView = Backbone.View.extend({
 
   onClick: function onClick(e) {
     var el = $(e.currentTarget).parent();
-    App.router.navigate(this.name + '/' + el.data('id'), {trigger: true});
+    App.router.navigate(this.name + '/edit/' + el.data('id'), {trigger: true});
   },
 
   onDelete: function onDelete() {
