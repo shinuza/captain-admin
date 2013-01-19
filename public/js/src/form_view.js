@@ -114,7 +114,6 @@ App.FormView = Backbone.View.extend({
       this.model.save(data);
     }
     this.model.once('sync', function() {
-      alert('Saved!');
       this.trigger('saved', this.model);
     }, this);
     return false;
