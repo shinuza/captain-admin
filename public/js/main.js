@@ -40,15 +40,16 @@ $(function() {
       title: {type: 'string', label: 'Title'},
       body: {type: 'text', label: 'Body'},
       published: {type: 'boolean', label: 'Published'}
-    },
-    onRender: function() {
-      var $label = $('<div/>', {text:'Tags:'});
-      var $ul = $('<ul/>', {'class': 'editable'});
-      this.addWidget($label);
-      this.addWidget($ul);
-
-      this.editable = $($ul).editable();
     }
+  });
+
+  App.postForm.on('render', function() {
+    var $label = $('<div/>', {text:'Tags:'});
+    var $ul = $('<ul/>', {'class': 'editable'});
+    this.addWidget($label);
+    this.addWidget($ul);
+
+    this.editable = $($ul).editable();
   });
 
   App.postForm.on('unload', function() {
@@ -97,6 +98,7 @@ $(function() {
       done();
     }
   });
+  App.postForm.construct();
 
   App.userForm = new App.FormView({
     name: 'users',
@@ -110,6 +112,7 @@ $(function() {
       isStaff: {type: 'boolean', label: 'Is staff'}
     }
   });
+  App.userForm.construct();
 
   App.tagForm = new App.FormView({
     name: 'tags',
@@ -118,6 +121,8 @@ $(function() {
       title: {type: 'string', label: 'Title'}
     }
   });
+  App.tagForm.construct();
+
 
   // Views
 

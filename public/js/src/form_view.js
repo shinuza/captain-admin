@@ -26,9 +26,6 @@ App.FormView = Backbone.View.extend({
       this.model.on('error', this.onError, this);
     }
 
-    this.render();
-    this.onRender();
-    this.build();
   },
 
   text: function Text(name, attributes) {
@@ -41,6 +38,11 @@ App.FormView = Backbone.View.extend({
 
   boolean: function Boolean(name, attributes) {
     return $('<input/>', _.extend({type: 'checkbox', name: name}, attributes));
+  },
+
+  construct: function construct() {
+    this.render();
+    this.build();
   },
 
   render: function render() {
