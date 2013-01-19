@@ -42,7 +42,8 @@ Editable.prototype = {
       $el = $(el);
       return {
         title: $el.html(),
-        id: $el.data('id')
+        id: $el.data('id'),
+        element: $el
       };
     });
   },
