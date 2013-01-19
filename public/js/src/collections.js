@@ -18,18 +18,18 @@ var Collection = Backbone.Collection.extend({
 
 App.Users = Collection.extend({
 
-  url: '/users' //TODO: Use config
+  url: '/users'
 
 });
 
 App.Posts = Collection.extend({
 
-  url: '/posts/?force=true' //TODO: Use config
+  url: '/posts/'
 
 });
 
 App.Tags = Collection.extend({
 
-  url: '/tags' //TODO: Use config
+  url: '/tags'
 
 });
