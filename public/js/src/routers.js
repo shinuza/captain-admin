@@ -1,17 +1,17 @@
 App.Router = Backbone.Router.extend({
 
   routes: {
-    "posts":          "listPosts",
-    "posts/new" :     "createPost",
-    "posts/edit/:id": "editPost",
+    "posts":          "posts:list",
+    "posts/new" :     "posts:new",
+    "posts/edit/:id": "posts:edit",
 
-    "tags":           "listTags",
-    "tags/new":       "createTag",
-    "tags/edit/:id":  "editTag",
+    "tags":           "tags:list",
+    "tags/new":       "tags:new",
+    "tags/edit/:id":  "tags:edit",
 
-    "users":          "listUsers",
-    "users/new":      "createUser",
-    "users/edit/:id": "editUser",
+    "users":          "users:list",
+    "users/new":      "users:new",
+    "users/edit/:id": "users:edit",
 
     "login":          "login",
     "logout":         "logout",
@@ -22,52 +22,52 @@ App.Router = Backbone.Router.extend({
     this.navigate('dashboard', {trigger: true});
   },
 
-  listPosts: function listPosts() {
+  'posts:list': function postsList() {
     App.postForm.unload();
     App.posts.fetch();
     App.region.setContent(App.postsView);
   },
 
-  createPost: function createPost() {
+  'posts:new': function postsNew() {
     App.postForm.unload();
     App.region.setContent(App.postForm);
   },
 
-  editPost: function editPost(id) {
+  'posts:edit': function postsEdit(id) {
     App.postForm.unload();
     App.postForm.load(id);
     App.region.setContent(App.postForm);
   },
 
-  listTags: function listTags() {
+  'tags:list': function tagsList() {
     App.tagForm.unload();
     App.tags.fetch();
     App.region.setContent(App.tagsView);
   },
 
-  createTag: function createTag() {
+  'tags:new': function tagsNew() {
     App.tagForm.unload();
     App.region.setContent(App.tagForm);
   },
 
-  editTag: function editTag(id) {
+  'tags:edit': function tagsEdit(id) {
     App.tagForm.unload();
     App.tagForm.load(id);
     App.region.setContent(App.tagForm);
   },
 
-  listUsers: function listUsers() {
+  'users:list': function usersList() {
     App.userForm.unload();
     App.users.fetch();
     App.region.setContent(App.usersView);
   },
 
-  createUser: function createUser() {
+  'users:new': function usersNew() {
     App.userForm.unload();
     App.region.setContent(App.userForm);
   },
 
-  editUser: function editUser(id) {
+  'users:edit': function usersEdit(id) {
     App.userForm.unload();
     App.userForm.load(id);
     App.region.setContent(App.userForm);
