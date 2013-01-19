@@ -37,12 +37,28 @@ Editable.prototype = {
   },
 
   serialize: function serialize() {
+    var $el;
     return [].map.call(this.$el.find('.old'), function(el) {
-      return el.innerText.trim();
+      $el = $(el);
+      return {
+        title: $el.html(),
+        id: $el.data('id')
+      };
     });
+  },
+
+  load: function(arr) {
+    if(Array.isArray(arr)) {
+      arr.forEach(function(obj) {
+        this.appendNew(obj.title, {'data-id': obj.id});
+      }, this);
+    }
+  },
+
+  clear: function() {
+    this.$el.find('.old').remove();
   }
 };
-
 
 $.fn.editable = function editable(options) {
   return new Editable(this, options);
