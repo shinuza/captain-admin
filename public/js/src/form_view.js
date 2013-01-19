@@ -9,29 +9,20 @@ App.FormView = Backbone.View.extend({
   },
 
   initialize: function initialize(options) {
-    var name = options.name;
     this.fields =  {};
     this.options = options;
     this.template = getTmpl(this.templateName);
 
     this.onRender = options.onRender || noop;
-    this.onSuccess = options.onSuccess || noop;
     this.onError = options.onError || noop;
 
     if(this.collection) {
-      this.collection.on('sync', function(collection, resp, options) {
-        if(!options.previousModels) {
-          App.router.navigate(name, {trigger: true});
-        }
-      });
-
-      this.collection.on('error', function() {
-        console.error(this);
-      });
+      this.collection.on('sync', function() {this.trigger('success', this.collection)}, this);
+      this.collection.on('error', this.onError, this);
     }
 
     if(this.model) {
-      this.model.on('sync', this.onSuccess, this);
+      this.model.on('sync', function() {this.trigger('success', this.model)}, this);
       this.model.on('error', this.onError, this);
     }
 
@@ -74,7 +65,7 @@ App.FormView = Backbone.View.extend({
     }, this);
   },
 
-  addWidget: function addWidget(el) {2
+  addWidget: function addWidget(el) {
     this.$el.find('.form-widgets').append(el);
   },
 
@@ -99,6 +90,7 @@ App.FormView = Backbone.View.extend({
   unload: function unload() {
     this.model = null;
     this.el.reset();
+    this.trigger('unload');
   },
 
   load: function load(id) {
@@ -121,6 +113,10 @@ App.FormView = Backbone.View.extend({
     } else {
       this.model.save(data);
     }
+    this.model.once('sync', function() {
+      alert('Saved!');
+      this.trigger('saved', this.model);
+    }, this);
     return false;
   }
 
