@@ -56,7 +56,7 @@ App.Router = Backbone.Router.extend({
     App.region.setContent(App.tagForm);
   },
 
-  users: function users() {
+  listUsers: function listUsers() {
     App.userForm.unload();
     App.users.fetch();
     App.region.setContent(App.usersView);
