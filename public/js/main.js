@@ -25,11 +25,12 @@ $(function() {
     fields: {
       username: {type: 'string', label: 'Username'},
       password: {type: 'string', label: 'Password', attributes: {'type': 'password'}}
-    },
-    onSuccess: function() {
-      App.overlay.hide();
-      App.router.navigate('dashboard', {trigger: true});
     }
+  });
+
+  App.loginForm.on('success', function(){
+    App.overlay.hide();
+    App.router.navigate('dashboard', {trigger: true});
   });
 
   App.postForm = new App.FormView({
@@ -45,7 +46,55 @@ $(function() {
       var $ul = $('<ul/>', {'class': 'editable'});
       this.addWidget($label);
       this.addWidget($ul);
-      $($ul).editable();
+
+      this.editable = $($ul).editable();
+    }
+  });
+
+  App.postForm.on('unload', function() {
+    this.editable.clear();
+  });
+
+  App.postForm.on('load', function(model) {
+    $.getJSON('/posts/' + model.get('id') + '/tags', this.editable.load.bind(this.editable));
+  });
+
+  App.postForm.on('saved', function() {
+    var data = this.editable.serialize();
+    var unsaved = data.filter(function(tag) { return !tag.id; });
+    var saved = 0;
+
+    var onSave = (function(model) {
+      this.editable.getElements().filter(function() {
+          return $(this).text() === model.get('title');
+        }).data('id', model.get('id'));
+    }.bind(this));
+
+    var done = (function() {
+      var url = '/posts/' + this.model.get('id') + '/tags';
+      var data = this.editable.serialize();
+      //TODO Try to simplify this?
+      $.ajax({
+        url: url,
+        data: JSON.stringify({data: data}),
+        type: 'POST',
+        contentType: 'application/json'
+      });
+    }.bind(this));
+
+    if(unsaved.length) {
+      unsaved.forEach(function(tag, index, tags) {
+        var model = App.tags.create(tag);
+        model.on('sync', function() {
+          saved ++;
+          onSave(model);
+          if(saved === tags.length) {
+            done();
+          }
+        });
+      });
+    } else {
+      done();
     }
   });
 
