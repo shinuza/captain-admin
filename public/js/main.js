@@ -32,6 +32,8 @@ $(function() {
     App.overlay.hide();
     App.router.navigate('dashboard', {trigger: true});
   });
+  App.loginForm.construct();
+
 
   App.postForm = new App.FormView({
     name: 'posts',
