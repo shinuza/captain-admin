@@ -23,8 +23,8 @@ App.Region = Backbone.View.extend({
       this.$el.html(view);
     } else {
       this.$el.append(view.$el);
-      this.onResized();
       view.trigger('display', view);
     }
+    this.onResized();
   }
 });
