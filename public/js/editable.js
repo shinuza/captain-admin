@@ -28,7 +28,7 @@ function Editable(el, options) {
 Editable.prototype = {
 
   appendNew: function appendNew(text, attributes) {
-    var old = $('<li/>', _.extend({'class': 'tag old', text: text}, attributes));
+    var old = $('<li/>', $.extend({'class': 'tag old', text: text}, attributes));
     old.insertBefore(this.$inputContainer);
   },
 
