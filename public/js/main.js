@@ -5,7 +5,6 @@ $(function() {
   App.session = new App.Session;
 
   App.region = new App.Region;
-  App.overlay = new App.Overlay;
   App.router = new App.Router;
 
   // Router
@@ -18,22 +17,6 @@ $(function() {
   });
 
   // Form
-
-  App.loginForm = new App.FormView({
-    name: 'login',
-    model: App.session,
-    fields: {
-      username: {type: 'string', label: 'Username'},
-      password: {type: 'string', label: 'Password', attributes: {'type': 'password'}}
-    }
-  });
-
-  App.loginForm.on('success', function(){
-    App.overlay.hide();
-    App.router.navigate('dashboard', {trigger: true});
-  });
-  App.loginForm.construct();
-
 
   App.postForm = new App.FormView({
     name: 'posts',

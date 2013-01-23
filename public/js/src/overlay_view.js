@@ -3,8 +3,6 @@ App.Overlay = Backbone.View.extend({
   el: '#overlay',
 
   initialize: function initialize() {
-    this.$shade = $('#shade');
-
     this.onResized();
     $(window).on('resize', this.onResized.bind(this));
   },
@@ -25,12 +23,10 @@ App.Overlay = Backbone.View.extend({
 
   show: function() {
     this.$el.removeClass('hidden');
-    this.$shade.removeClass('hidden');
   },
 
   hide: function() {
     this.$el.addClass('hidden');
-    this.$shade.addClass('hidden');
   }
 
 });

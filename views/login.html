@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>CaptainJS - Login</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+<div id="overlay" class="hidden">
+  <form id="login-form">
+    <h1>Login</h1>
+    <div class="fields">
+      <p>
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username">
+      </p>
+      <p>
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password">
+      </p>
+    </div>
+    <input id="submit" type="submit" class="button submit create">
+  </form>
+</div>
+
+  <script src="js/lib/underscore.js"></script>
+  <script src="js/lib/zepto.js"></script>
+  <script src="js/lib/swig.js"></script>
+  <script src="js/lib/backbone.js"></script>
+
+  <script src="js/src/app.js"></script>
+  <script src="js/src/overlay_view.js"></script>
+  <script>
+    $(function() {
+      App.overlay = new App.Overlay;
+      App.overlay.show();
+
+      var username = $('#username');
+      var password = $('#password');
+
+      $('#login-form').submit(function() {
+        var data = { username: username.val(), password: password.val() };
+        $.ajax({
+          type: 'POST',
+          url: '/sessions',
+          data: JSON.stringify(data),
+          contentType: 'application/json',
+          timeout: 300,
+          success: function(data) {
+            document.location.assign(document.location.href.replace('login', ''));
+          },
+          error: function(xhr, type){
+            alert('Authentication failed');
+            username.focus();
+          }
+        });
+        return false;
+      });
+    });
+  </script>
+</body>
+</html>

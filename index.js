@@ -1,19 +1,24 @@
 var express = require('express'),
+    core = require('captainjs-core'),
     app = express();
 
-var settings = require('captainjs-core').getSettings();
-
 app.use(express.static(__dirname + '/public'));
-app.use(express.static(settings.get('MEDIA_ROOT')));
+app.use(express.static(core.settings.get('MEDIA_ROOT')));
+app.use(express.cookieParser());
+app.use(core.middleware.authenticate());
 
-app.get('/', function(req, res){
-  res.sendfile(__dirname + '/views/layout.html');
-});
-
-if(require.main === module) {
-  app.listen(9000, function() {
-    console.log('Listening at http://localhost:9000');
+app.on('mount', function(parent) {
+  app.get('/', function(req, res) {
+    if(!req.session) {
+      res.redirect(req.originalUrl + 'login');
+    } else {
+      res.sendfile(__dirname + '/views/layout.html');
+    }
   });
-}
+
+  app.get('/login', function(req, res) {
+    res.sendfile(__dirname + '/views/login.html');
+  });
+});
 
 module.exports = app;
