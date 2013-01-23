@@ -23,6 +23,7 @@ $(function() {
     collection: App.posts,
     fields: {
       title: {type: 'string', label: 'Title'},
+      summary: {type: 'text', label: 'Summary'},
       body: {type: 'text', label: 'Body'},
       published: {type: 'boolean', label: 'Published'}
     }
