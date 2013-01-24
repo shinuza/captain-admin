@@ -21,6 +21,7 @@ body { font-family: 'Copse', serif; margin: 0; height: 100%; position: relative;
 
 .float-right { float: right; }
 .float-left { float: left; }
+.hidden { display: none !important; }
 
 /* Navigation */
 

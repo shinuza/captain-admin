@@ -114,6 +114,7 @@ $(function() {
 
   App.userView = new App.UserView({model: App.session});
   App.menuView = new App.MenuView;
+  App.alertView = new App.AlertView;
 
   App.postsView = new App.ListView({
     collection: App.posts,

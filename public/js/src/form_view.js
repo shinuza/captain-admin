@@ -14,7 +14,7 @@ App.FormView = Backbone.View.extend({
     this.template = getTmpl(this.templateName);
 
     this.onRender = options.onRender || noop;
-    this.onError = options.onError || noop;
+    this.onError = options.onError || this.onError;
 
     if(this.collection) {
       this.collection.on('sync', function() {this.trigger('success', this.collection)}, this);
@@ -116,9 +116,15 @@ App.FormView = Backbone.View.extend({
       this.model.save(data);
     }
     this.model.once('sync', function() {
+      App.alertView.success('Saved');
       this.trigger('saved', this.model);
     }, this);
     return false;
+  },
+
+  onError: function onError() {
+    console.log(arguments)
+    App.alertView.error('Invalid form');
   }
 
 });
