@@ -59,7 +59,7 @@
         <a href="#{{name}}/new" class="button icon create">Create new</a>
         <a href="#" class="button icon delete">Delete selected</a>
       </p>
-
+      {% if lines.length > 0 %}
       <table id="{{name}}">
         <thead>
           <tr>
@@ -102,6 +102,9 @@
           {% endfor %}
         </tbody>
       </table>
+      {% else %}
+      Nothing here yet.
+      {% endif %}
     </script>
 
     <script type="text/html" id="form">
