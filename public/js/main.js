@@ -91,7 +91,6 @@ $(function() {
     collection: App.users,
     fields: {
       username: {type: 'string', label: 'Username'},
-      password: {type: 'string', label: 'Password', attributes: {'type': 'password'}},
       firstname: {type: 'string', label: 'First name'},
       lastname: {type: 'string', label: 'Last name'},
       email: {type: 'string', label: 'Email'},
