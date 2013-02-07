@@ -120,7 +120,7 @@ $(function() {
     name: 'posts',
     columns: [
       {'label': 'Title', 'value': 'title'},
-      {'label': 'Created at', 'value': 'createdAt', 'type': 'date'},
+      {'label': 'Created at', 'value': 'created_at', 'type': 'date'},
       {'label': 'Published', 'value': 'published', 'type': 'bool'}
     ]
   });
@@ -130,7 +130,7 @@ $(function() {
     name: 'tags',
     columns: [
       {'label': 'Title', 'value': 'title'},
-      {'label': 'Created at', 'value': 'createdAt', 'type': 'date'}
+      {'label': 'Posts', 'value': 'count'}
     ]
   });
 
@@ -139,7 +139,7 @@ $(function() {
     name: 'users',
     columns: [
       {'label': 'Username', 'value': 'username'},
-      {'label': 'Created at', 'value': 'createdAt', 'type': 'date'},
+      {'label': 'Created at', 'value': 'created_at', 'type': 'date'},
       {'label': 'Is staff', 'value': 'isStaff', 'type': 'bool'}
     ]
   });
