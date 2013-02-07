@@ -5,7 +5,7 @@ function Editable(el, options) {
   this.$inputContainer = $('<li/>', {'class': 'tag new'});
   this.$input = $('<input/>', {type: 'text'});
 
-  this.$input.keyup(function(e) {
+  this.$input.keydown(function(e) {
     var text = this.$input.val();
     if(e.keyCode === 13 && text !== '') {
       this.appendNew(text);
