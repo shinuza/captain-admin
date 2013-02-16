@@ -117,7 +117,7 @@ $(function() {
       DB: {type: 'string', label: 'Database'},
       TIME_ZONE: {type: 'string', label: 'Time zone'},
       SITE_URL: {type: 'string', label: 'Site url'},
-      POSTS_BY_PAGE: {type: 'string', label: 'Post by page'}
+      POSTS_BY_PAGE: {type: 'int', label: 'Post by page'}
     }
   });
   App.settingsForm.construct();

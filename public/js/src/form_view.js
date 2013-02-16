@@ -36,6 +36,10 @@ App.FormView = Backbone.View.extend({
     return $('<input/>', $.extend({type: 'text', name: name}, attributes));
   },
 
+  int: function Int(name, attributes) {
+    return $('<input/>', $.extend({type: 'number', name: name}, attributes));
+  },
+
   boolean: function Boolean(name, attributes) {
     return $('<input/>', $.extend({type: 'checkbox', name: name}, attributes));
   },
@@ -81,6 +85,8 @@ App.FormView = Backbone.View.extend({
       type = widget.attr('type');
       if(type === 'checkbox') {
         v = widget.prop('checked');
+      } else if(type === 'number') {
+        v = parseInt(widget.val(), 10);
       } else {
         v = widget.val();
       }
