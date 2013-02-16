@@ -15,7 +15,8 @@ App.Router = Backbone.Router.extend({
 
     "login":          "login",
     "logout":         "logout",
-    "dashboard":      "dashboard"
+    "dashboard":      "dashboard",
+    "settings":       "settings"
   },
 
   initialize: function initialize() {
@@ -73,11 +74,6 @@ App.Router = Backbone.Router.extend({
     App.region.setContent(App.userForm);
   },
 
-  login: function login() {
-    App.overlay.setContent(App.loginForm);
-    App.overlay.show();
-  },
-
   logout: function logout() {
     App.session.destroy();
     App.session.clear();
@@ -86,6 +82,11 @@ App.Router = Backbone.Router.extend({
 
   dashboard: function dashboard() {
     App.region.setContent('<h1>Dashboard</h1>');
+  },
+
+  settings: function settings() {
+    App.settingsForm.load('current');
+    App.region.setContent(App.settingsForm);
   }
 
 });

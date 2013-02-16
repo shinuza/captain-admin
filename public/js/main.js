@@ -3,6 +3,7 @@ $(function() {
   App.posts = new App.Posts;
   App.tags = new App.Tags;
   App.session = new App.Session;
+  App.settings = new App.Settings;
 
   App.region = new App.Region;
   App.router = new App.Router;
@@ -108,6 +109,19 @@ $(function() {
   });
   App.tagForm.construct();
 
+  App.settingsForm = new App.FormView({
+    name: 'settings',
+    model: App.settings,
+    fields: {
+      SITE_TITLE: {type: 'string', label: 'Site title'},
+      DB: {type: 'string', label: 'Database'},
+      TIME_ZONE: {type: 'string', label: 'Time zone'},
+      SITE_URL: {type: 'string', label: 'Site url'},
+      POSTS_BY_PAGE: {type: 'string', label: 'Post by page'}
+    }
+  });
+  App.settingsForm.construct();
+
 
   // Views
 
@@ -143,6 +157,8 @@ $(function() {
       {'label': 'Is staff', 'value': 'isStaff', 'type': 'bool'}
     ]
   });
+
   Backbone.history.start();
   App.session.fetch();
+  App.settings.fetch();
 });

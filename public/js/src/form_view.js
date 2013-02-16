@@ -96,7 +96,7 @@ App.FormView = Backbone.View.extend({
   },
 
   load: function load(id) {
-    var model = this.model = this.collection.get(id);
+    var model = this.collection ? this.collection.get(id) : this.model;
     _.each(model.attributes, function(value, key) {
       var field = this.getField(key);
       if(typeof value === 'boolean') {

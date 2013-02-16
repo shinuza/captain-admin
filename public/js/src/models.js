@@ -14,3 +14,16 @@ App.Session = Backbone.Model.extend({
     return this.get('id') !== undefined;
   }
 });
+
+App.Settings = Backbone.Model.extend({
+
+  defaults: {
+    id: 'current'
+  },
+
+  url: function() {
+    var s = this.get('id') || '';
+    return '/conf/' + s;
+  }
+
+});
