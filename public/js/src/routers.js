@@ -20,7 +20,9 @@ App.Router = Backbone.Router.extend({
   },
 
   initialize: function initialize() {
-    this.navigate('dashboard', {trigger: true});
+    if(document.location.hash === '') {
+      document.location.hash = '#dashboard';
+    }
   },
 
   'posts:list': function postsList() {
