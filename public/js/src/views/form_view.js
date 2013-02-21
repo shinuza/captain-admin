@@ -11,9 +11,9 @@ App.FormView = Backbone.View.extend({
   initialize: function initialize(options) {
     this.fields =  {};
     this.options = options;
-    this.template = getTmpl(this.templateName);
+    this.template = App.getTmpl(this.templateName);
 
-    this.onRender = options.onRender || noop;
+    this.onRender = options.onRender || App.noop;
     this.onError = options.onError || this.onError;
 
     if(this.collection) {

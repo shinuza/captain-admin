@@ -17,7 +17,7 @@ App.ListView = Backbone.View.extend({
     this.name = options.name;
     this.columns = options.columns;
     this.collection = options.collection;
-    this.tmpl = getTmpl(this.templateName);
+    this.tmpl = App.getTmpl(this.templateName);
 
     this.collection.on('destroy', function (model) {
       var view = this.get(model.id);
