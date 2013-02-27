@@ -1,23 +1,15 @@
 $(function() {
+
+  // Instances
   App.users = new App.Users;
+
   App.posts = new App.Posts;
+
   App.tags = new App.Tags;
+
   App.session = new App.Session;
+
   App.settings = new App.Settings;
-
-  App.region = new App.Region;
-  App.router = new App.Router;
-
-  // Router
-
-  App.router.on('all', function routeAll(route) {
-    var name = route.split(':')[1];
-    if(name) {
-      App.menuView.select(name);
-    }
-  });
-
-  // Form
 
   App.postForm = new App.FormView({
     name: 'posts',
@@ -30,63 +22,6 @@ $(function() {
     }
   });
 
-  App.postForm.on('render', function() {
-    var $label = $('<div/>', {text:'Tags:'});
-    var $ul = $('<ul/>', {'class': 'editable'});
-    this.addWidget($label);
-    this.addWidget($ul);
-
-    this.editable = $($ul).editable();
-  });
-
-  App.postForm.on('unload', function() {
-    this.editable.clear();
-  });
-
-  App.postForm.on('load', function(model) {
-    $.getJSON('/posts/' + model.get('id') + '/tags', this.editable.load.bind(this.editable));
-  });
-
-  App.postForm.on('saved', function() {
-    var data = this.editable.serialize();
-    var unsaved = data.filter(function(tag) { return !tag.id; });
-    var saved = 0;
-
-    var onSave = (function(model) {
-      this.editable.getElements().filter(function() {
-          return $(this).text() === model.get('title');
-        }).data('id', model.get('id'));
-    }.bind(this));
-
-    var done = (function() {
-      var url = '/posts/' + this.model.get('id') + '/tags';
-      var data = this.editable.serialize();
-      //TODO Try to simplify this?
-      $.ajax({
-        url: url,
-        data: JSON.stringify({data: data}),
-        type: 'POST',
-        contentType: 'application/json'
-      });
-    }.bind(this));
-
-    if(unsaved.length) {
-      unsaved.forEach(function(tag, index, tags) {
-        var model = App.tags.create(tag);
-        model.on('sync', function() {
-          saved ++;
-          onSave(model);
-          if(saved === tags.length) {
-            done();
-          }
-        });
-      });
-    } else {
-      done();
-    }
-  });
-  App.postForm.construct();
-
   App.userForm = new App.FormView({
     name: 'users',
     collection: App.users,
@@ -98,16 +33,6 @@ $(function() {
       isStaff: {type: 'boolean', label: 'Is staff'}
     }
   });
-  App.userForm.construct();
-
-  App.tagForm = new App.FormView({
-    name: 'tags',
-    collection: App.tags,
-    fields: {
-      title: {type: 'string', label: 'Title'}
-    }
-  });
-  App.tagForm.construct();
 
   App.settingsForm = new App.FormView({
     name: 'settings',
@@ -120,14 +45,14 @@ $(function() {
       POSTS_BY_PAGE: {type: 'int', label: 'Post by page'}
     }
   });
-  App.settingsForm.construct();
 
-
-  // Views
-
-  App.userView = new App.UserView({model: App.session});
-  App.menuView = new App.MenuView;
-  App.alertView = new App.AlertView;
+  App.tagForm = new App.FormView({
+    name: 'tags',
+    collection: App.tags,
+    fields: {
+      title: {type: 'string', label: 'Title'}
+    }
+  });
 
   App.postsView = new App.ListView({
     collection: App.posts,
@@ -158,6 +83,34 @@ $(function() {
     ]
   });
 
+  App.tagEditorView = new App.TagEditorView({
+    view: App.postForm
+  });
+
+  App.userView = new App.UserView({
+    model: App.session
+  });
+
+  App.menuView = new App.MenuView;
+
+  App.alertView = new App.AlertView;
+
+  App.region = new App.Region;
+
+  App.router = new App.Router;
+
+  // Router
+  App.router.on('all', function routeAll(route) {
+    var name = route.split(':')[1];
+    if(name) {
+      App.menuView.select(name);
+    }
+  });
+
+  App.postForm.construct();
+  App.userForm.construct();
+  App.tagForm.construct();
+  App.settingsForm.construct();
   Backbone.history.start();
   App.session.fetch();
   App.settings.fetch();

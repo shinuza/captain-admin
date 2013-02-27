@@ -107,9 +107,9 @@ App.FormView = Backbone.View.extend({
   },
 
   load: function load(id) {
-    var model = this.collection ? this.collection.get(id) : this.model;
+    this.model = this.collection ? this.collection.get(id) : this.model;
 
-    _.each(model.attributes, function(value, key) {
+    _.each(this.model.attributes, function(value, key) {
       var field = this.getField(key);
 
       switch(typeof value) {
@@ -123,7 +123,7 @@ App.FormView = Backbone.View.extend({
 
     }, this);
 
-    this.trigger('load', model);
+    this.trigger('load', this.model);
   },
 
   onSubmit: function onSubmit() {
