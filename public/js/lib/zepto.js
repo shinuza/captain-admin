@@ -1466,6 +1466,14 @@ window.Zepto = Zepto
     return $.ajax(options)
   }
 
+  $.postJSON = function(url, data, success){
+    var options = parseArguments.apply(null, arguments)
+    options.type = 'POST'
+    options.dataType = 'json'
+    options.contentType = 'application/json'
+    return $.ajax(options)
+  }
+
   $.fn.load = function(url, data, success){
     if (!this.length) return this
     var self = this, parts = url.split(/\s/), selector,

@@ -50,13 +50,7 @@ App.TagEditorView = Backbone.View.extend({
   },
 
   commit: function() {
-    //TODO Try to simplify this?
-    $.ajax({
-      url: this.url(),
-      data: JSON.stringify({data: this.serialize()}),
-      type: 'POST',
-      contentType: 'application/json'
-    });
+    $.postJSON(this.url(), JSON.stringify(this.serialize()));
   },
 
   save: function() {
