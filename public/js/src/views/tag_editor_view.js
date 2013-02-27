@@ -43,7 +43,7 @@ App.TagEditorView = Backbone.View.extend({
     }).data('id', model.get('id'));
   },
 
-  newTag: function() {
+  newTags: function() {
     return this.serialize().filter(function(tag) {
       return !tag.id;
     });
@@ -54,24 +54,17 @@ App.TagEditorView = Backbone.View.extend({
   },
 
   save: function() {
-    var self = this,
-        saved = 0,
-        unsaved = this.newTag();
+    var self = this;
 
-    if(unsaved.length > 0) {
-      _.each(unsaved, function(tag, index, tags) {
-        var model = App.tags.create(tag);
-        model.on('sync', function() {
-          saved += 1;
-          self.updateTag(model);
-          if(saved === tags.length) {
-            self.commit();
-          }
-        });
+    function process(tag, next) {
+      var model = App.tags.create(tag);
+      model.on('sync', function() {
+        self.updateTag(model);
+        next();
       });
-    } else {
-      this.commit();
     }
+
+    async.forEach(this.newTags(), process, this.commit.bind(this));
   }
 
 });
