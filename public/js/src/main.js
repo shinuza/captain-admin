@@ -93,6 +93,8 @@ $(function() {
 
   App.menuView = new App.MenuView;
 
+  App.dashboardView = new App.DashBoardView;
+
   App.alertView = new App.AlertView;
 
   App.region = new App.Region;
