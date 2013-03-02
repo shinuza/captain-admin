@@ -29,27 +29,43 @@
       </div>
       <div id="main"></div>
     </div>
-    <!-- SCRIPTS -->
+    <!-- LIBS -->
     <script src="js/lib/underscore.js"></script>
     <script src="js/lib/zepto.js"></script>
-    <script src="js/lib/swig.js"></script>
+    <script src="js/lib/async.js"></script>
     <script src="js/lib/backbone.js"></script>
+    <script src="js/lib/swig.js"></script>
 
-    <script src="js/editable.js"></script>
+    <!-- SRC -->
     <script src="js/src/app.js"></script>
-    <script src="js/src/util.js"></script>
 
-    <script src="js/src/collections.js"></script>
-    <script src="js/src/models.js"></script>
-    <script src="js/src/views.js"></script>
-    <script src="js/src/routers.js"></script>
+    <script src="js/src/collections/posts_collection.js"></script>
+    <script src="js/src/collections/tags_collection.js"></script>
+    <script src="js/src/collections/users_collection.js"></script>
 
-    <script src="js/src/region_view.js"></script>
-    <script src="js/src/form_view.js"></script>
-    <script src="js/src/alert_view.js"></script>
-    <script src="js/src/list_view.js"></script>
+    <script src="js/src/models/session_model.js"></script>
+    <script src="js/src/models/settings_model.js"></script>
 
-    <script src="js/main.js"></script>
+    <script src="js/src/views/alert_view.js"></script>
+    <script src="js/src/views/form_view.js"></script>
+    <script src="js/src/views/list_view.js"></script>
+    <script src="js/src/views/menu_view.js"></script>
+    <script src="js/src/views/overlay_view.js"></script>
+    <script src="js/src/views/region_view.js"></script>
+    <script src="js/src/views/tag_editor_view.js"></script>
+    <script src="js/src/views/user_view.js"></script>
+
+    <script src="js/src/dashboard/dashboard.js"></script>
+    <script src="js/src/dashboard/posts.js"></script>
+    <script src="js/src/dashboard/users.js"></script>
+    <script src="js/src/dashboard/tags.js"></script>
+    <script src="js/src/dashboard/counts.js"></script>
+
+    <script src="js/src/widgets/editable.js"></script>
+
+    <script src="js/src/router.js"></script>
+
+    <script src="js/src/main.js"></script>
 
     <!-- TEMPLATES -->
     <script type="text/tmpl" id="list">

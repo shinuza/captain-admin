@@ -83,7 +83,7 @@ App.Router = Backbone.Router.extend({
   },
 
   dashboard: function dashboard() {
-    App.region.setContent('<h1>Dashboard</h1>');
+    App.region.setContent(App.dashboardView);
   },
 
   settings: function settings() {

@@ -11,9 +11,9 @@ App.FormView = Backbone.View.extend({
   initialize: function initialize(options) {
     this.fields =  {};
     this.options = options;
-    this.template = getTmpl(this.templateName);
+    this.template = App.getTmpl(this.templateName);
 
-    this.onRender = options.onRender || noop;
+    this.onRender = options.onRender || App.noop;
     this.onError = options.onError || this.onError;
 
     if(this.collection) {
@@ -80,17 +80,22 @@ App.FormView = Backbone.View.extend({
   },
 
   serialize: function serialize() {
-    var v, type, data = {};
+    var type, data = {};
+
     _.each(this.fields, function(widget, key) {
       type = widget.attr('type');
-      if(type === 'checkbox') {
-        v = widget.prop('checked');
-      } else if(type === 'number') {
-        v = parseInt(widget.val(), 10);
-      } else {
-        v = widget.val();
+
+      switch(type) {
+        case "checkbox":
+          data[key] = widget.prop('checked');
+          break;
+        case "number":
+          data[key] = Number(widget.val());
+          break;
+        default:
+          data[key] = widget.val();
+          break;
       }
-      data[key] = v;
     });
     return  data;
   },
@@ -102,34 +107,44 @@ App.FormView = Backbone.View.extend({
   },
 
   load: function load(id) {
-    var model = this.collection ? this.collection.get(id) : this.model;
-    _.each(model.attributes, function(value, key) {
+    this.model = this.collection ? this.collection.get(id) : this.model;
+
+    _.each(this.model.attributes, function(value, key) {
       var field = this.getField(key);
-      if(typeof value === 'boolean') {
-        field.prop('checked', value);
-      } else {
-        field.val(value);
+
+      switch(typeof value) {
+        case "boolean":
+          field.prop('checked', value);
+          break;
+        default:
+          field.val(value);
+          break;
       }
+
     }, this);
-    this.trigger('load', model);
+
+    this.trigger('load', this.model);
   },
 
   onSubmit: function onSubmit() {
     var data = this.serialize();
+
     if(!this.model) {
       this.model = this.collection.create(data);
     } else {
       this.model.save(data);
     }
+
     this.model.once('sync', function() {
       App.alertView.success('Saved');
       this.trigger('saved', this.model);
     }, this);
+
     return false;
   },
 
   onError: function onError() {
-    console.log(arguments)
+    console.log(arguments);
     App.alertView.error('Invalid form');
   }
 
