@@ -77,6 +77,11 @@ form textarea { height: 300px; }
 #overlay.hidden { top: -500px !important; }
 #overlay .close { float: right; margin-bottom: 20px; }
 
+.dashboard .widget { border: 1px solid #ddd; border-radius: 3px; padding: 0 15px; margin: 15px 0; width: 49.9%; }
+.dashboard .quarter { width: 25%; }
+.dashboard .half { width: 50%; }
+.counts span { color: #ff6018; }
+
 /* Icons */
 
 .icon32 { display: inline-block; vertical-align: middle; background-image: url(img/icons-32.png); min-width: 32px; min-height: 32px; }
