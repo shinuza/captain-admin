@@ -7,7 +7,7 @@ App.Overlay = Backbone.View.extend({
     $(window).on('resize', this.onResized.bind(this));
   },
 
-  setContent: function(view) {
+  setView: function(view) {
     this.$el.empty().append(view.$el);
     this.onResized();
   },
