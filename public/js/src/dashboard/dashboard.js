@@ -3,7 +3,7 @@ App.Widget = Backbone.View.extend({
   construct: function construct() {
     if(this.components) {
       _.each(this.components, function(component) {
-        this.$el.append(component.construct());
+        this.$el.append(component.construct ? component.construct() : component);
       }, this);
     } else {
       this.render();
@@ -46,6 +46,8 @@ App.DataWidget = App.Widget.extend({
 });
 
 App.DashBoardView = Backbone.View.extend({
+
+  className: 'dashboard',
 
   initialize: function() {
     var countsWidget = new App.CountsWidget();

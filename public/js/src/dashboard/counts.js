@@ -1,8 +1,9 @@
 App.CountsWidget = App.Widget.extend({
 
-  'className': 'counts',
+  'className': 'widget counts quarter',
 
   components: [
+    $('<h3></h3>', {'html': 'Content'}),
     new App.PostsWidget,
     new App.TagsWidget,
     new App.UsersWidget

@@ -28,52 +28,52 @@ App.Router = Backbone.Router.extend({
   'posts:list': function postsList() {
     App.postForm.unload();
     App.posts.fetch();
-    App.region.setContent(App.postsView);
+    App.region.setView(App.postsView);
   },
 
   'posts:new': function postsNew() {
     App.postForm.unload();
-    App.region.setContent(App.postForm);
+    App.region.setView(App.postForm);
   },
 
   'posts:edit': function postsEdit(id) {
     App.postForm.unload();
     App.postForm.load(id);
-    App.region.setContent(App.postForm);
+    App.region.setView(App.postForm);
   },
 
   'tags:list': function tagsList() {
     App.tagForm.unload();
     App.tags.fetch();
-    App.region.setContent(App.tagsView);
+    App.region.setView(App.tagsView);
   },
 
   'tags:new': function tagsNew() {
     App.tagForm.unload();
-    App.region.setContent(App.tagForm);
+    App.region.setView(App.tagForm);
   },
 
   'tags:edit': function tagsEdit(id) {
     App.tagForm.unload();
     App.tagForm.load(id);
-    App.region.setContent(App.tagForm);
+    App.region.setView(App.tagForm);
   },
 
   'users:list': function usersList() {
     App.userForm.unload();
     App.users.fetch();
-    App.region.setContent(App.usersView);
+    App.region.setView(App.usersView);
   },
 
   'users:new': function usersNew() {
     App.userForm.unload();
-    App.region.setContent(App.userForm);
+    App.region.setView(App.userForm);
   },
 
   'users:edit': function usersEdit(id) {
     App.userForm.unload();
     App.userForm.load(id);
-    App.region.setContent(App.userForm);
+    App.region.setView(App.userForm);
   },
 
   logout: function logout() {
@@ -83,12 +83,13 @@ App.Router = Backbone.Router.extend({
   },
 
   dashboard: function dashboard() {
-    App.region.setContent(App.dashboardView);
+    App.region.setHtml('<h1>Dashboard</h1>');
+    App.region.setView(App.dashboardView, true);
   },
 
   settings: function settings() {
     App.settingsForm.load('current');
-    App.region.setContent(App.settingsForm);
+    App.region.setView(App.settingsForm);
   }
 
 });
