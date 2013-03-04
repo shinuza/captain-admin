@@ -13,7 +13,7 @@ App.Session = Backbone.Model.extend({
           }
         }
       });
-    }.bind(this), 6 * 1000);
+    }.bind(this), 60 * 1000);
 
     Backbone.Model.prototype.initialize.call(this);
   },
