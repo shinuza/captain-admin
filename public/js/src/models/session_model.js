@@ -4,11 +4,21 @@ App.Session = Backbone.Model.extend({
     id: 'current'
   },
 
-  url: function() {
-    return '/sessions/' + (this.get('id') || '');
+  initialize: function initialize() {
+    setInterval(function() {
+      this.fetch({
+        error: function(model, xhr) {
+          if(xhr.status === 404) {
+            document.location.reload(true);
+          }
+        }
+      });
+    }.bind(this), 6 * 1000);
+
+    Backbone.Model.prototype.initialize.call(this);
   },
 
-  isAnonymous: function isAnonymous() {
-    return this.get('id') !== undefined;
+  url: function() {
+    return '/sessions/' + (this.get('id') || '');
   }
 });
