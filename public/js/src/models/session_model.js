@@ -14,8 +14,6 @@ App.Session = Backbone.Model.extend({
         }
       });
     }.bind(this), 60 * 1000);
-
-    Backbone.Model.prototype.initialize.call(this);
   },
 
   url: function() {
