@@ -25,13 +25,17 @@ body { font-family: 'Copse', serif; margin: 0; height: 100%; position: relative;
 
 /* Navigation */
 
-nav { position: absolute; top:0; bottom:0; left:0; height: 100%; width: 255px; background: #fbfbfb;}
-nav ul { list-style-type: none; padding: 0; background: #ff6018; }
-nav b { float: right; position: relative; top: -3px; }
-nav li a { display:block; height: 20px; padding: 15px 20px; border-top: 1px solid white; background: #fbfbfb; }
-nav li a.active { margin-left: 5px; border-color: #cdcbcb; border-style: solid; border-width: 1px 0 1px 0; background: white; position: relative; left: 1px; z-index: 2; }
-nav li a:hover { color: #ff6018 }
+.menu { position: absolute; top:0; bottom:0; left:0; height: 100%; width: 255px; background: #fbfbfb;}
+.menu ul { list-style-type: none; padding: 0; background: #ff6018; }
+.menu b { float: right; position: relative; top: -3px; }
+.menu li a { display:block; height: 20px; padding: 15px 20px; border-top: 1px solid white; background: #fbfbfb; }
+.menu li a.active { margin-left: 5px; border-color: #cdcbcb; border-style: solid; border-width: 1px 0 1px 0; background: white; position: relative; left: 1px; z-index: 2; }
+.menu li a:hover { color: #ff6018 }
 
+.pagination { margin: 10px; }
+.pagination .next, .pagination .prev { display: inline-block; padding: 0 10px; }
+.pagination .active { text-decoration: underline; cursor: pointer; }
+.pagination .active:hover { text-decoration: none; }
 /* Typo */
 a { text-decoration: none; }
 h1 { opacity: .2; position: relative; margin: 0; }

@@ -9,7 +9,7 @@
   </head>
   <body>
     <div id="alert" class="alert"></div>
-    <nav>
+    <nav rel="menu" class="menu">
       <a href="/" id="home"><span>Home</span></a>
       <ul id="menu">
         <li><a href="#dashboard">Dashboard<b class="icon32 home"></b></a></li>
@@ -39,6 +39,7 @@
     <!-- SRC -->
     <script src="js/src/app.js"></script>
 
+    <script src="js/src/collections/base_collection.js"></script>
     <script src="js/src/collections/posts_collection.js"></script>
     <script src="js/src/collections/tags_collection.js"></script>
     <script src="js/src/collections/users_collection.js"></script>
@@ -118,6 +119,10 @@
           {% endfor %}
         </tbody>
       </table>
+      <nav id="{{name}}-pagination" class="pagination">
+          <span class="prev" href="#">Previous</span>
+          <span class="next">Next</span>
+      </nav>
       {% else %}
       Nothing here yet.
       {% endif %}
