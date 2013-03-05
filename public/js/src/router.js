@@ -79,7 +79,8 @@ App.Router = Backbone.Router.extend({
   logout: function logout() {
     App.session.destroy();
     App.session.clear();
-    App.router.navigate('dashboard', {trigger: true});
+    document.location.hash = '';
+    document.location.reload();
   },
 
   dashboard: function dashboard() {
