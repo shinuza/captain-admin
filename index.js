@@ -8,13 +8,12 @@ app.use(express.cookieParser());
 app.use(core.modules.middleware.authenticate());
 
 app.get('/', function(req, res) {
-  var url = req.originalUrl;
-  if(!url.match(/\/$/)) {
-    return res.redirect(url + '/');
+  if(!req.originalUrl.match(/\/$/)) {
+    return res.redirect(301, '');
   }
 
   if(!req.session) {
-    res.redirect(url + 'login');
+    res.redirect('login');
   } else {
     res.sendfile(__dirname + '/views/layout.html');
   }
