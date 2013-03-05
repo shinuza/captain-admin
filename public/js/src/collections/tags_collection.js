@@ -1,4 +1,4 @@
-App.Tags = Backbone.Collection.extend({
+App.Tags = App.BaseCollection.extend({
 
   url: '/tags'
 

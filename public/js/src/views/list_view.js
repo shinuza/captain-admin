@@ -29,6 +29,7 @@ App.ListView = Backbone.View.extend({
     }.bind(this));
 
     this.collection.on('sync', this.render, this);
+    this.collection.on('sync', this.paginate, this);
   },
 
   render: function render() {
@@ -40,6 +41,27 @@ App.ListView = Backbone.View.extend({
 
     var html = this.tmpl(context);
     this.$el.empty().html(html);
+  },
+
+  paginate: function(collection, json) {
+    var self = this,
+        el = this.$('#' + this.name + '-pagination'),
+        next = el.find('.next'),
+        prev = el.find('.prev');
+
+    if(json.next) {
+      next.addClass('active');
+      next.click(function() {
+        self.collection.next();
+      });
+    }
+
+    if(json.prev) {
+      prev.addClass('active');
+      prev.click(function() {
+        self.collection.prev();
+      });
+    }
   },
 
   selected: function selected() {

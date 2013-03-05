@@ -1,4 +1,4 @@
-App.Users = Backbone.Collection.extend({
+App.Users = App.BaseCollection.extend({
 
   url: '/users'
 
