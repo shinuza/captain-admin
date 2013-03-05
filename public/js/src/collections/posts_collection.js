@@ -1,9 +1,5 @@
-App.Posts = Backbone.Collection.extend({
+App.Posts = App.BaseCollection.extend({
 
-  url: '/posts',
-
-  parse: function(json) {
-    return json.posts;
-  }
+  url: '/posts'
 
 });
