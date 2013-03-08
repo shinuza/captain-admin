@@ -1,8 +1,10 @@
-App.StepViewer = Backbone.View.extend({
+App.StepsGraph = Backbone.View.extend({
 
-  el: '#step-viewer',
+  el: '#step-graph',
 
   initialize: function initialize(options) {
+    options = options || {};
+    this.index = options.initial || 0;
     this.count = options.count;
     this.steps = [];
 
@@ -16,18 +18,39 @@ App.StepViewer = Backbone.View.extend({
       this.$el.append(step);
       this.steps.push(step);
     }, this);
+
+    this.select(this.index);
   },
 
-  highlight: function highlight(index, hex) {
-    this.steps[index].css('background', hex);
+  highlight: function highlight(step, hex) {
+    step.css('background', hex);
   },
 
-  on: function on(index) {
-    this.highlight(index, '#ccc');
+  select: function(index) {
+    var target = this.steps[index];
+    if(target) {
+      this.steps.forEach(function(step) {
+        this.highlight(step, '#eee');
+      }, this);
+      this.highlight(target, '#ccc');
+      this.index = index;
+      return true
+    }
+    return false;
   },
 
-  off: function off(index) {
-    this.highlight(index, '#eee');
+  previous: function() {
+    var index = this.index - 1;
+    if(this.select(index)) {
+      this.trigger('previous', [index]);
+    }
+  },
+
+  next: function() {
+    var index = this.index + 1;
+    if(this.select(index)) {
+      this.trigger('next', [index]);
+    }
   }
 
 });

@@ -6,7 +6,7 @@
         <link rel="stylesheet" href="css/main.css">
     </head>
     <body>
-        <div id="step-viewer" class="row"></div>
+        <div id="step-graph" class="row"></div>
 
         <div class="row">
             <div class="unit marginR50">
@@ -23,38 +23,38 @@
             </div>
             <div class="last-unit padding50">
                 <div id="screens">
-                    <div data-id="0">
+
+                    <div data-id="0" class="screen">
                         <h1>Ahoy! It workeh!</h1>
                         <p>We will now walk through the project configuration</p>
-                        <p>
-                            <a class="button">Next &gt;&gt;</a>
-                        </p>
                     </div>
-                    <div data-id="1">
+
+                    <div data-id="1" class="screen">
                        <form>
                            <p>
                                <label for="db">Enter the ???</label>
-                               <input id="db">
-                           </p>
-                           <p>
-                               <a class="button">&lt;&lt; Previous</a>
-                               <a class="button">Next &gt;&gt;</a>
+                               <input id="db" placeholder="tcp://example@localhost/example">
                            </p>
                        </form>
                     </div>
-                    <div data-id="2">
+
+                    <div data-id="2" class="screen">
 
                     </div>
-                    <div data-id="3">
+
+                    <div data-id="3" class="screen">
 
                     </div>
-                    <div data-id="4">
+
+                    <div data-id="4" class="screen">
 
                     </div>
-                    <div data-id="5">
+
+                    <div data-id="5" class="screen">
 
                     </div>
-                    <div data-id="6">
+
+                    <div data-id="6" class="screen">
 
                     </div>
                 </div>
@@ -72,7 +72,15 @@
         <script>
             $(function() {
                 var stepCount = $('#steps li').size();
-                App.stepViewer = new App.StepViewer({count: stepCount});
+                App.stepGraph = new App.StepsGraph({count: stepCount});
+                App.screens = new App.Screens();
+                App.screens.on('previous', function() {
+                    App.stepGraph.previous();
+                });
+
+                App.screens.on('next', function() {
+                    App.stepGraph.next();
+                });
             });
         </script>
     </body>
