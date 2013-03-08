@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Captain.js - Setup</title>
+        <link rel="stylesheet" href="css/main.css">
+    </head>
+    <body>
+        <div id="step-viewer" class="row"></div>
+
+        <div class="row">
+            <div class="unit marginR50">
+                <a href="/" id="home"><span>Home</span></a>
+                <ul id="steps">
+                    <li data-id="0">Introduction</li>
+                    <li data-id="1">Database configuration</li>
+                    <li data-id="2">Connection test</li>
+                    <li data-id="3">Tables creation</li>
+                    <li data-id="4">Site id generation</li>
+                    <li data-id="5">Secret key generation</li>
+                    <li data-id="6">Superuser creation</li>
+                </ul>
+            </div>
+            <div class="last-unit padding50">
+                <div id="screens">
+                    <div data-id="0">
+                        <h1>Ahoy! It workeh!</h1>
+                        <p>We will now walk through the project configuration</p>
+                        <p>
+                            <a class="button">Next &gt;&gt;</a>
+                        </p>
+                    </div>
+                    <div data-id="1">
+                       <form>
+                           <p>
+                               <label for="db">Enter the ???</label>
+                               <input id="db">
+                           </p>
+                           <p>
+                               <a class="button">&lt;&lt; Previous</a>
+                               <a class="button">Next &gt;&gt;</a>
+                           </p>
+                       </form>
+                    </div>
+                    <div data-id="2">
+
+                    </div>
+                    <div data-id="3">
+
+                    </div>
+                    <div data-id="4">
+
+                    </div>
+                    <div data-id="5">
+
+                    </div>
+                    <div data-id="6">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="js/lib/underscore.js"></script>
+        <script src="js/lib/zepto.js"></script>
+        <script src="js/lib/swig.js"></script>
+        <script src="js/lib/backbone.js"></script>
+
+        <script src="js/src/app.js"></script>
+        <script src="js/src/widgets/steps.js"></script>
+        <script src="js/src/widgets/screens.js"></script>
+        <script>
+            $(function() {
+                var stepCount = $('#steps li').size();
+                App.stepViewer = new App.StepViewer({count: stepCount});
+            });
+        </script>
+    </body>
+</html>
