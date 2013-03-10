@@ -40,7 +40,8 @@ App.Screens = Backbone.View.extend({
 
   previous: function() {
     var index = this.index - 1;
-    if(this.select(null, index)) {
+    if(this.exists(index)) {
+      this.select(index);
       this.trigger('previous', [index]);
     }
   },
