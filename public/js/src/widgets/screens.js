@@ -24,16 +24,14 @@ App.Screens = Backbone.View.extend({
     this.select(null, this.index);
   },
 
-  select: function(err, index) {
-    var target = this.get(index);
-    if(target) {
-      this.index = index;
-      this.execute(err, index);
-      this.screens.hide();
-      target.show();
-      return true
-    }
-    return false;
+  exists: function(index) {
+    return !!this.get(index);
+  },
+
+  select: function(index) {
+    this.index = index;
+    this.screens.hide();
+    this.get(index).show();
   },
 
   get: function(index) {
@@ -55,24 +53,27 @@ App.Screens = Backbone.View.extend({
         method = form.attr('method'),
         action = form.attr('action');
 
-    var go = function go(err) {
-      if(this.select(err, index)) {
-        this.trigger('next', [index]);
+    var done = function go(err) {
+      if(this.exists(index)) {
+        if(this.execute(err, this.index)) {
+          this.select(index);
+          this.trigger('next', [index]);
+        }
       }
     }.bind(this);
 
     if(form.length) {
       data = method == 'post' ? form.serializeObject() : form.serialize();
       url = method == 'post' ? action : action + '?' + data;
-      args = method == 'post' ?  [url, data, go] : [url, go];
+      args = method == 'post' ?  [url, data, done] : [url, done];
       xhr = $[method + 'JSON'].apply(null, args);
       xhr.onloadend = function() {
         if(xhr.status > 201) {
-          go(JSON.parse(xhr.responseText));
+          done(JSON.parse(xhr.responseText));
         }
       }
     } else {
-      go();
+      done();
     }
   },
 
@@ -83,15 +84,11 @@ App.Screens = Backbone.View.extend({
   execute: function(err, index) {
     var fn = this.fns[index],
         view = this.get(index);
-    if(fn) fn.apply(this, [err, view]);
-  },
 
-  activate: function(index) {
-    this.get(index || this.index).find('.next').show();
-  },
-
-  deactivate: function(index) {
-    this.get(index || this.index).find('.next').hide();
+    if(fn) {
+      return !(fn.apply(this, [err, view]));
+    }
+    return true;
   },
 
   _addPrevious: function() {

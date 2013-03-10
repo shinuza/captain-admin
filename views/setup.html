@@ -39,20 +39,15 @@
                     </div>
 
                     <div data-id="2" class="screen">
-                        <h1>Connection test</h1>
-                        <div class="status">!</div>
+                        <h1>Configuration file</h1>
+                        <form action="/setup/commit" method="post"></form>
                     </div>
 
                     <div data-id="3" class="screen">
-                        <h1>Configuration file</h1>
-                        <h2 class="status"></h2>
-                    </div>
-
-                    <div data-id="4" class="screen">
                         <h1>Tables creation</h1>
                     </div>
 
-                    <div data-id="5" class="screen">
+                    <div data-id="4" class="screen">
                         <h1>Superuser creation</h1>
                     </div>
                 </div>
@@ -73,15 +68,11 @@
                 var stepCount = $('#steps li').size();
                 App.stepGraph = new App.StepsGraph({count: stepCount});
                 App.screens = new App.Screens({
-                    '2':  function(err, view) {
-                        this.activate();
-                        var status = view.find('.status'), message = 'Success!';
-                        if(err.code == 'ENOTFOUND') {
-                            message = 'Failure: Address not found!<br>' +
-                                      'Please go back and verify your URI.';
-                            this.deactivate();
+                    '1':  function(err) {
+                        if(err && err.code == 'ENOTFOUND') {
+                            return 'Failure: Address not found!<br>' +
+                                    'Please go back and verify your URI.';
                         }
-                        status.html(message);
                     }
                 });
 
