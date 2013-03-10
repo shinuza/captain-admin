@@ -9,9 +9,9 @@ App.Screens = Backbone.View.extend({
     'click .previous': 'previous'
   },
 
-  initialize: function(fns) {
+  initialize: function(options) {
     this.index = 0;
-    this.fns = fns;
+    this.options = options;
     this.screens = this.$('.screen');
 
     this.screens.forEach(function(screen, index, screens) {
@@ -32,6 +32,7 @@ App.Screens = Backbone.View.extend({
     this.index = index;
     this.screens.hide();
     this.get(index).show();
+    this.trigger(index);
   },
 
   get: function(index) {
@@ -47,27 +48,31 @@ App.Screens = Backbone.View.extend({
   },
 
   next: function() {
-    var xhr,
+    var xhr, data,
         index = this.index + 1,
         view = this.get(this.index),
         form = view.find('form'),
         method = form.attr('method'),
         action = form.attr('action');
 
-    var done = function go(err) {
+    var done = function done(obj) {
       if(this.exists(index)) {
-        if(this.execute(err, this.index)) {
+        if(!obj || obj.ok) {
           this.select(index);
           this.trigger('next', [index]);
+        } else {
+          alert(obj.message);
         }
       }
     }.bind(this);
 
     if(form.length) {
-      xhr = $[method + 'JSON'](action, JSON.stringify(form.serializeObject()), done);
+      data = JSON.stringify(form.serializeObject());
+      xhr = $[method + 'JSON'](action, data, done);
       xhr.onloadend = function() {
         if(xhr.status > 201) {
-          done(JSON.parse(xhr.responseText));
+          var obj = JSON.parse(xhr.responseText);
+          done(obj);
         }
       }
     } else {
@@ -79,12 +84,11 @@ App.Screens = Backbone.View.extend({
     return $('<a/>', {'class': 'button ' + type, html: label });
   },
 
-  execute: function(err, index) {
-    var fn = this.fns[index],
-        view = this.get(index);
+  validate: function(err, index) {
+    var fn = this.options.validate;
 
     if(fn) {
-      return !(fn.apply(this, [err, view]));
+      return !(fn.apply(this, arguments));
     }
     return true;
   },

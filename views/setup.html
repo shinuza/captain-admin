@@ -40,7 +40,9 @@
 
                     <div data-id="2" class="screen">
                         <h1>Configuration file</h1>
-                        <form action="/setup/commit" method="post"></form>
+                        <form action="/setup/commit" method="post">
+                            <input type="hidden">
+                        </form>
                     </div>
 
                     <div data-id="3" class="screen">
@@ -65,15 +67,20 @@
         <script src="js/src/widgets/screens.js"></script>
         <script>
             $(function() {
-                var stepCount = $('#steps li').size();
+                var uri,
+                    stepCount = $('#steps li').size();
                 App.stepGraph = new App.StepsGraph({count: stepCount});
-                App.screens = new App.Screens({
-                    '1':  function(err) {
-                        if(err && err.code == 'ENOTFOUND') {
-                            return 'Failure: Address not found!<br>' +
-                                    'Please go back and verify your URI.';
-                        }
-                    }
+                App.screens = new App.Screens();
+
+                App.screens.on('2', function() {
+                    uri = this.get(1).find('input').val();
+                });
+
+                App.screens.on('3', function() {
+                    var es = new EventSource('/setup/table-creation?uri=' + uri);
+                    es.onmessage = function() {
+                        console.log(arguments)
+                    };
                 });
 
                 App.screens.on('previous', function() {
