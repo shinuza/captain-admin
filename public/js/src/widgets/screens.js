@@ -46,7 +46,7 @@ App.Screens = Backbone.View.extend({
   },
 
   next: function() {
-    var data, url, args, xhr,
+    var xhr,
         index = this.index + 1,
         view = this.get(this.index),
         form = view.find('form'),
@@ -63,10 +63,7 @@ App.Screens = Backbone.View.extend({
     }.bind(this);
 
     if(form.length) {
-      data = method == 'post' ? form.serializeObject() : form.serialize();
-      url = method == 'post' ? action : action + '?' + data;
-      args = method == 'post' ?  [url, data, done] : [url, done];
-      xhr = $[method + 'JSON'].apply(null, args);
+      xhr = $[method + 'JSON'](action, JSON.stringify(form.serializeObject()), done);
       xhr.onloadend = function() {
         if(xhr.status > 201) {
           done(JSON.parse(xhr.responseText));
