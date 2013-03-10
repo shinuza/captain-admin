@@ -15,10 +15,9 @@
                     <li data-id="0">Introduction</li>
                     <li data-id="1">Database configuration</li>
                     <li data-id="2">Connection test</li>
-                    <li data-id="3">Tables creation</li>
-                    <li data-id="4">Site id generation</li>
-                    <li data-id="5">Secret key generation</li>
-                    <li data-id="6">Superuser creation</li>
+                    <li data-id="3">Configuration file</li>
+                    <li data-id="4">Tables creation</li>
+                    <li data-id="5">Superuser creation</li>
                 </ul>
             </div>
             <div class="last-unit padding50">
@@ -31,31 +30,29 @@
 
                     <div data-id="1" class="screen">
                        <h1>Database configuration</h1>
-                       <form>
+                       <form action="/setup/connection-test" method="get">
                            <p>
                                <label for="db">Connection URI String:</label>
-                               <input id="db" placeholder="tcp://example@localhost/example">
+                               <input id="db" placeholder="tcp://example@localhost/example" type="text" name="uri">
                            </p>
                        </form>
                     </div>
 
                     <div data-id="2" class="screen">
                         <h1>Connection test</h1>
+                        <div class="status">!</div>
                     </div>
 
                     <div data-id="3" class="screen">
-                        <h1>Tables creation</h1>
+                        <h1>Configuration file</h1>
+                        <h2 class="status"></h2>
                     </div>
 
                     <div data-id="4" class="screen">
-                        <h1>Site id generation</h1>
+                        <h1>Tables creation</h1>
                     </div>
 
                     <div data-id="5" class="screen">
-                        <h1>Secret key generation</h1>
-                    </div>
-
-                    <div data-id="6" class="screen">
                         <h1>Superuser creation</h1>
                     </div>
                 </div>
@@ -64,6 +61,7 @@
 
         <script src="js/lib/underscore.js"></script>
         <script src="js/lib/zepto.js"></script>
+        <script src="js/lib/zepto.extra.js"></script>
         <script src="js/lib/swig.js"></script>
         <script src="js/lib/backbone.js"></script>
 
@@ -74,7 +72,19 @@
             $(function() {
                 var stepCount = $('#steps li').size();
                 App.stepGraph = new App.StepsGraph({count: stepCount});
-                App.screens = new App.Screens();
+                App.screens = new App.Screens({
+                    '2':  function(err, view) {
+                        this.activate();
+                        var status = view.find('.status'), message = 'Success!';
+                        if(err.code == 'ENOTFOUND') {
+                            message = 'Failure: Address not found!<br>' +
+                                      'Please go back and verify your URI.';
+                            this.deactivate();
+                        }
+                        status.html(message);
+                    }
+                });
+
                 App.screens.on('previous', function() {
                     App.stepGraph.previous();
                 });

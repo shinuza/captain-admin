@@ -9,7 +9,6 @@ App.FormView = Backbone.View.extend({
   },
 
   initialize: function initialize(options) {
-    this.fields =  {};
     this.options = options;
     this.template = App.getTmpl(this.templateName);
 
@@ -66,8 +65,6 @@ App.FormView = Backbone.View.extend({
 
       p.append(label, widget);
       container.append(p);
-
-      this.fields[name] = widget;
     }, this);
   },
 
@@ -77,27 +74,6 @@ App.FormView = Backbone.View.extend({
 
   getField: function getField(key) {
     return this.$el.find('[name="' + key + '"]');
-  },
-
-  serialize: function serialize() {
-    var type, data = {};
-
-    _.each(this.fields, function(widget, key) {
-      type = widget.attr('type');
-
-      switch(type) {
-        case "checkbox":
-          data[key] = widget.prop('checked');
-          break;
-        case "number":
-          data[key] = Number(widget.val());
-          break;
-        default:
-          data[key] = widget.val();
-          break;
-      }
-    });
-    return  data;
   },
 
   unload: function unload() {
@@ -127,7 +103,7 @@ App.FormView = Backbone.View.extend({
   },
 
   onSubmit: function onSubmit() {
-    var data = this.serialize();
+    var data = this.$el.serializeObject();
 
     if(!this.model) {
       this.model = this.collection.create(data);
