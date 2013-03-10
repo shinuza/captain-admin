@@ -41,7 +41,7 @@
                     <div data-id="2" class="screen">
                         <h1>Configuration file</h1>
                         <form action="/setup/commit" method="post">
-                            <input type="hidden">
+                            <input type="hidden" name="uri">
                         </form>
                     </div>
 
@@ -74,12 +74,16 @@
 
                 App.screens.on('2', function() {
                     uri = this.get(1).find('input').val();
+                    $('input[name="uri"]').val(uri);
                 });
 
                 App.screens.on('3', function() {
                     var es = new EventSource('/setup/table-creation?uri=' + uri);
-                    es.onmessage = function() {
-                        console.log(arguments)
+                    es.onmessage = function(message) {
+                        var json = JSON.parse(message.data);
+                        if(json.done) {
+                            es.close();
+                        }
                     };
                 });
 
