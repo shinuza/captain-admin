@@ -11,7 +11,8 @@
 
 /* Structure */
 
-a { color: #333; }
+a { color: #999; }
+a:hover { text-decoration: underline; }
 body { font-family: 'Copse', serif; margin: 0; height: 100%; position: relative; }
 
 #main { padding: 20px; }
@@ -63,7 +64,7 @@ form textarea { height: 300px; }
 
 /* Module */
 
-.button:hover { background: #ff6018; }
+.button:hover { background: #ff6018; text-decoration: none; }
 .button { display: inline-block; background: #333; padding: 8px 10px 8px 10px; color: white; text-decoration: none; border-radius: 2px; border: 0; cursor: pointer; font-family: inherit; font-size: 14px; }
 .button.icon { display: inline-block; background-image: url(img/icons-16.png); width: 16px; height: 16px; }
 .button.icon.create { background-position: 8px 8px; }
