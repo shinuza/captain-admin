@@ -65,8 +65,8 @@ form textarea { height: 300px; }
 /* Module */
 
 .button:hover { background: #ff6018; text-decoration: none; }
-.button { display: inline-block; background: #333; padding: 8px 10px 8px 10px; color: white; text-decoration: none; border-radius: 2px; border: 0; cursor: pointer; font-family: inherit; font-size: 14px; }
-.button.icon { display: inline-block; background-image: url(img/icons-16.png); width: 16px; height: 16px; }
+.button { display: inline-block; background: #333; padding: 6px 10px 8px 10px; color: white; text-decoration: none; border-radius: 2px; border: 0; cursor: pointer; font-family: inherit; font-size: 14px; }
+.button.icon { display: inline-block; background-image: url(img/icons-16.png); height: 16px; text-indent: 20px; }
 .button.icon.create { background-position: 8px 8px; }
 .button.icon.delete { background-position: 8px -92px; }
 .button[type=submit], .button.submit { min-width: 90px; padding-bottom: 5px; background: #ff6018; }
