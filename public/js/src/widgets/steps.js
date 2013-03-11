@@ -32,7 +32,7 @@ App.StepsGraph = Backbone.View.extend({
       this.steps.forEach(function(step) {
         this.highlight(step, '#eee');
       }, this);
-      this.highlight(target, '#ccc');
+      this.highlight(target, '#aaa');
       this.index = index;
       return true
     }
