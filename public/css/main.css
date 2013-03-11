@@ -11,7 +11,8 @@
 
 /* Structure */
 
-a { color: #333; }
+a { color: #999; }
+a:hover { text-decoration: underline; }
 body { font-family: 'Copse', serif; margin: 0; height: 100%; position: relative; }
 
 #main { padding: 20px; }
@@ -20,8 +21,13 @@ body { font-family: 'Copse', serif; margin: 0; height: 100%; position: relative;
 #home span { display: none; }
 
 .float-right { float: right; }
-.float-left { float: left; }
+.float-left, .unit { float: left; }
 .hidden { display: none !important; }
+.overflow-hidden, .row, .last-unit { overflow: hidden; }
+
+.padding50 { padding: 50px; }
+.marginB50 { margin-bottom: 50px !important; }
+.marginR50 { margin-right: 50px !important; }
 
 /* Navigation */
 
@@ -36,9 +42,10 @@ body { font-family: 'Copse', serif; margin: 0; height: 100%; position: relative;
 .pagination .next, .pagination .prev { display: inline-block; padding: 0 10px; }
 .pagination .active { text-decoration: underline; cursor: pointer; }
 .pagination .active:hover { text-decoration: none; }
+
 /* Typo */
 a { text-decoration: none; }
-h1 { opacity: .2; position: relative; margin: 0; }
+h1 { opacity: .4; position: relative; margin: 0; font-weight: normal; }
 
 /* Table */
 
@@ -57,8 +64,8 @@ form textarea { height: 300px; }
 
 /* Module */
 
-.button:hover { background: #ff6018; }
-.button { display: inline-block; background: #333; padding: 5px 10px 10px 10px; min-width: 120px; color: white; text-decoration: none; text-indent: 20px; border-radius: 2px; border: 0; cursor: pointer; font-family: inherit; font-size: 14px; }
+.button:hover { background: #ff6018; text-decoration: none; }
+.button { display: inline-block; background: #333; padding: 8px 10px 8px 10px; color: white; text-decoration: none; border-radius: 2px; border: 0; cursor: pointer; font-family: inherit; font-size: 14px; }
 .button.icon { display: inline-block; background-image: url(img/icons-16.png); width: 16px; height: 16px; }
 .button.icon.create { background-position: 8px 8px; }
 .button.icon.delete { background-position: 8px -92px; }
@@ -85,6 +92,9 @@ form textarea { height: 300px; }
 .dashboard .quarter { width: 25%; }
 .dashboard .half { width: 50%; }
 .counts span { color: #ff6018; }
+
+#steps li { list-style-type: none; }
+#screens .previous { margin-right: 5px; }
 
 /* Icons */
 
