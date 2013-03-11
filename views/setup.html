@@ -30,29 +30,58 @@
 
                     <div data-id="1" class="screen">
                        <h1>Database configuration</h1>
+                        <h4>Please enter the URI to access your Postgres server.
+                            It should be something like tcp://user:password@host/database
+                        </h4>
                        <form action="/setup/connection-test" method="post">
                            <p>
-                               <label for="db">Connection URI String:</label>
-                               <input id="db" placeholder="tcp://example@localhost/example" type="text" name="uri">
+                               <label for="db">* Connection URI String:</label>
+                               <input id="db" type="text" name="uri">
                            </p>
                        </form>
                     </div>
 
                     <div data-id="2" class="screen">
                         <h1>Configuration file</h1>
+                        <h4>Press next to create your initial configuration file.</h4>
                         <form action="/setup/commit" method="post">
-                            <input type="hidden" name="uri">
                         </form>
                     </div>
 
                     <div data-id="3" class="screen">
                         <h1>Tables creation</h1>
+                        <h4>We are creating the tables in order to install the application.</h4>
+                        <p>
+                            <small>
+                                <a href="#" id="log-details">Click to view details.</a>
+                            </small>
+                        </p>
+                        <pre id="log"></pre>
                     </div>
 
                     <div data-id="4" class="screen">
                         <h1>Superuser creation</h1>
+                        <h4>Create a user to login in later on.</h4>
+                        <form action="/setup/user-creation" method="post">
+                            <p>
+                                <label for="username">* Username:</label>
+                                <input id="username" type="text" name="username">
+                            </p>
+                            <p>
+                                <label for="password">* Password:</label>
+                                <input id="password" type="text" name="password">
+                            </p>
+                        </form>
+                    </div>
+
+                    <div data-id="done" class="screen">
+                        <h1>Make all sail!</h1>
+                        <p>You can now <a href="/admin/#posts">create content</a> or
+                            <a href="/admin/#settings">edit the configuration</a>
+                        </p>
                     </div>
                 </div>
+                <small>* Required fields</small>
             </div>
         </div>
 
@@ -67,20 +96,19 @@
         <script src="js/src/widgets/screens.js"></script>
         <script>
             $(function() {
-                var uri,
-                    stepCount = $('#steps li').size();
+                var stepCount = $('#steps li').size();
+
                 App.stepGraph = new App.StepsGraph({count: stepCount});
                 App.screens = new App.Screens();
-
-                App.screens.on('2', function() {
-                    uri = this.get(1).find('input').val();
-                    $('input[name="uri"]').val(uri);
-                });
-
                 App.screens.on('3', function() {
-                    var es = new EventSource('/setup/table-creation?uri=' + uri);
+                    var log = $('#log').hide();
+                    var logDetails = $('#log-details');
+                    logDetails.click(function() { log.toggle();});
+
+                    var es = new EventSource('/setup/table-creation');
                     es.onmessage = function(message) {
                         var json = JSON.parse(message.data);
+                        log.html([log.html(), json.script].join('\n\n'));
                         if(json.done) {
                             es.close();
                         }
