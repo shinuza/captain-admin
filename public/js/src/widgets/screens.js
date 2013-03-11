@@ -17,7 +17,7 @@ App.Screens = Backbone.View.extend({
     this.screens.forEach(function(screen, index, screens) {
       var p = $('<p/>');
       if(index > 0) p.append(this._addPrevious());
-      if(index < screens.length) p.append(this._addNext());
+      if(index < screens.length - 1) p.append(this._addNext());
       $(screen).append(p);
     }, this);
 
