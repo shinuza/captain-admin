@@ -94,6 +94,7 @@ form textarea { height: 300px; }
 .counts span { color: #ff6018; }
 
 #steps li { list-style-type: none; }
+#screens .previous { margin-right: 5px; }
 
 /* Icons */
 
