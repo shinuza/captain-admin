@@ -6,7 +6,8 @@ App.Screens = Backbone.View.extend({
 
   events: {
     'click .next': 'next',
-    'click .previous': 'previous'
+    'click .previous': 'previous',
+    'submit form': 'submit'
   },
 
   initialize: function(options) {
@@ -78,6 +79,11 @@ App.Screens = Backbone.View.extend({
     } else {
       done();
     }
+  },
+
+  submit: function() {
+    this.next();
+    return false;
   },
 
   addButton: function(type, label) {
