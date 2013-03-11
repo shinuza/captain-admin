@@ -96,9 +96,9 @@
         <script src="js/src/widgets/screens.js"></script>
         <script>
             $(function() {
-                var stepCount = $('#steps li').size();
+                var steps = $('li', '#steps ');
 
-                App.stepGraph = new App.StepsGraph({count: stepCount});
+                App.stepGraph = new App.StepsGraph({count: steps.size()});
                 App.screens = new App.Screens();
                 App.screens.on('3', function() {
                     var log = $('#log').hide();
@@ -115,11 +115,14 @@
                     };
                 });
 
-                App.screens.on('previous', function() {
+                App.screens.on('previous', function(index) {
                     App.stepGraph.previous();
                 });
 
-                App.screens.on('next', function() {
+                App.screens.on('next', function(index) {
+                    var previous = steps.eq(index - 1);
+                    var tick = $('<span> &#10004</span>').css('color', '#3cc75c');
+                    previous.append(tick);
                     App.stepGraph.next();
                 });
             });

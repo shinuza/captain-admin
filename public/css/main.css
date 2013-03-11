@@ -93,6 +93,8 @@ form textarea { height: 300px; }
 .dashboard .half { width: 50%; }
 .counts span { color: #ff6018; }
 
+#steps li { list-style-type: none; }
+
 /* Icons */
 
 .icon32 { display: inline-block; vertical-align: middle; background-image: url(img/icons-32.png); min-width: 32px; min-height: 32px; }
