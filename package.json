@@ -1,10 +1,15 @@
 {
-  "name": "captainjs-admin",
-  "description": "Captain JS",
+  "name": "captain-admin",
+  "description": "Admin front-end for captain",
   "version": "0.5.5",
-  "private": true,
+  "author": "Samori Gorse <samorigorse@gmail.com>",
   "dependencies": {
-    "captainjs-core": "",
+    "captain-core": "",
     "express": "*"
+  },
+  "repository": "git://github.com/shinuza/captain-admin",
+  "main": "index",
+  "engines": {
+    "node": ">=0.6 <0.10"
   }
 }
