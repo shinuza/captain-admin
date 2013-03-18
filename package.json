@@ -1,14 +1,22 @@
 {
   "name": "captain-admin",
-  "description": "Admin front-end for captain",
+  "description": "Admin front-end for captain.js",
+  "keywords": ["blog", "cms", "content", "management", "web", "admin"],
   "version": "0.5.5",
-  "author": "Samori Gorse <samorigorse@gmail.com>",
+  "author": {
+    "name": "Samori Gorse",
+    "email": "samorigorse@gmail.com"
+  },
+  "bugs": "https://github.com/shinuza/captain-admin/issues",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/shinuza/captain-admin"
+  },
+  "main": "index.js",
   "dependencies": {
     "captain-core": "",
-    "express": "*"
+    "express": "3.1.0"
   },
-  "repository": "git://github.com/shinuza/captain-admin",
-  "main": "index",
   "engines": {
     "node": ">=0.6 <0.10"
   }

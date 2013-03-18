@@ -1,7 +1,7 @@
 var path = require('path');
 
 var express = require('express'),
-    core = require('captainjs-core'),
+    core = require('captain-core'),
     app = express();
 
 app.use(express.static(__dirname + '/public'));
