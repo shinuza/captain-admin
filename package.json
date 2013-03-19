@@ -1,7 +1,14 @@
 {
   "name": "captain-admin",
   "description": "Admin front-end for captain.js",
-  "keywords": ["blog", "cms", "content", "management", "web", "admin"],
+  "keywords": [
+    "blog",
+    "cms",
+    "content",
+    "management",
+    "web",
+    "admin"
+  ],
   "version": "0.5.5",
   "author": {
     "name": "Samori Gorse",
@@ -14,8 +21,7 @@
   },
   "main": "index.js",
   "dependencies": {
-    "captain-core": "",
-    "express": "3.1.0"
+    "express": "~3.1.0"
   },
   "engines": {
     "node": ">=0.6 <0.10"

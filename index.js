@@ -1,13 +1,8 @@
-var path = require('path');
-
-var express = require('express'),
-    core = require('captain-core'),
+var path = require('path'),
+    express = require('express'),
     app = express();
 
 app.use(express.static(__dirname + '/public'));
-app.use(express.static(core.modules.settings.get('MEDIA_ROOT')));
-app.use(express.cookieParser());
-app.use(core.modules.middleware.authenticate());
 
 //TODO: Temporary
 function autorender(req, res) {
