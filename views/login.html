@@ -26,6 +26,7 @@
 
   <script src="js/lib/underscore.js"></script>
   <script src="js/lib/zepto.js"></script>
+  <script src="js/lib/zepto.extra.js"></script>
   <script src="js/lib/swig.js"></script>
   <script src="js/lib/backbone.js"></script>
 
@@ -40,21 +41,18 @@
       var password = $('#password');
 
       $('#login-form').submit(function() {
-        var data = { username: username.val(), password: password.val() };
-        $.ajax({
-          type: 'POST',
-          url: '/sessions',
-          data: JSON.stringify(data),
-          contentType: 'application/json',
-          timeout: 300,
-          success: function(data) {
-            document.location.assign(document.location.href.replace('login', ''));
-          },
-          error: function(xhr, type){
-            alert('Authentication failed');
-            username.focus();
-          }
+        var data = {
+          username: username.val(),
+          password: password.val()
+        };
+
+        $.postJSON('/sessions', JSON.stringify(data), function() {
+          document.location.assign(document.location.href.replace('login', ''));
+        }, function(){
+           alert('Authentication failed');
+           username.focus();
         });
+
         return false;
       });
     });
