@@ -38,11 +38,12 @@
     }
   });
 
-  $.postJSON = function(url, data, success){
-    var options = parseArguments.apply(null, arguments);
+  $.postJSON = function(url, data, options) {
+    options = parseArguments.apply(null, arguments);
     options.type = 'POST';
     options.dataType = 'json';
     options.contentType = 'application/json';
+    options.error = options.error;
     return $.ajax(options)
   };
 
