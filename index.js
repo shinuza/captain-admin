@@ -4,8 +4,7 @@ var path = require('path'),
 
 app.use(express.static(__dirname + '/public'));
 
-//TODO: Temporary
-function autorender(req, res) {
+function render(req, res) {
   var view = path.basename(req.url) || 'layout';
   res.sendfile(__dirname + '/views/' + view + '.html');
 }
@@ -18,11 +17,11 @@ app.get('/', function(req, res) {
   if(!req.session) {
     res.redirect('login');
   } else {
-    autorender(req, res);
+    render(req, res);
   }
 });
 
-app.get('/login', autorender);
-app.get('/setup', autorender);
+app.get('/login', render);
+app.get('/create_user', render);
 
 module.exports = app;
