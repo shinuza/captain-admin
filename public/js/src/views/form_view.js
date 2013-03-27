@@ -5,6 +5,7 @@ App.FormView = Backbone.View.extend({
   templateName: 'form',
 
   events: {
+    'submit': 'onSubmit',
     'click .submit': 'onSubmit'
   },
 
