@@ -22,6 +22,5 @@ app.get('/', function(req, res) {
 });
 
 app.get('/login', render);
-app.get('/create_user', render);
 
 module.exports = app;
