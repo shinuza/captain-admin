@@ -103,7 +103,7 @@ App.FormView = Backbone.View.extend({
   },
 
   onSubmit: function onSubmit() {
-    var data = this.$el.serializeObject();
+    var data = this.$el.find('.fields').serializeObject();
 
     if(!this.model) {
       this.model = this.collection.create(data);
