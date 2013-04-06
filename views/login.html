@@ -40,6 +40,8 @@
       var username = $('#username');
       var password = $('#password');
 
+      username.focus();
+
       $('#login-form').submit(function() {
         var data = {
           username: username.val(),
