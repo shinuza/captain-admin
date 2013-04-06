@@ -1,5 +1,7 @@
 App.Posts = App.BaseCollection.extend({
 
-  url: '/posts'
+  url: '/posts',
+
+  key: 'posts'
 
 });

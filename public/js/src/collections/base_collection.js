@@ -4,9 +4,12 @@ App.BaseCollection = Backbone.Collection.extend({
     this.pagination = new Backbone.Model;
   },
 
-  parse: function(json) {
+  parse: function parse(json) {
+    if(!this.key) {
+      throw new Error('You must specify which key to use for parsing');
+    }
     this.pagination.set(json);
-    return json.posts;
+    return json[this.key];
   },
 
   page: function(nb) {
