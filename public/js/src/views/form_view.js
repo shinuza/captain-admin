@@ -32,16 +32,20 @@ App.FormView = Backbone.View.extend({
     return $('<textarea/>', $.extend({name: name}, attributes));
   },
 
+  input: function(type, name, attributes) {
+    return $('<input/>', $.extend({type: type, name: name}, attributes));
+  },
+
   string: function String(name, attributes) {
-    return $('<input/>', $.extend({type: 'text', name: name}, attributes));
+    return this.input('text', name, attributes);
   },
 
   int: function Int(name, attributes) {
-    return $('<input/>', $.extend({type: 'number', name: name}, attributes));
+    return this.input('number', name, attributes);
   },
 
   boolean: function Boolean(name, attributes) {
-    return $('<input/>', $.extend({type: 'checkbox', name: name}, attributes));
+    return this.input('checkbox', name, attributes);
   },
 
   construct: function construct() {
