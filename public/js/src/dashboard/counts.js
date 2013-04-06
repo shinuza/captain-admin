@@ -4,6 +4,7 @@ App.CountsWidget = App.Widget.extend({
 
   components: [
     $('<h3></h3>', {'html': 'Content'}),
+    new App.PublishedPostsWidget,
     new App.PostsWidget,
     new App.TagsWidget,
     new App.UsersWidget
