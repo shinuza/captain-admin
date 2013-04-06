@@ -38,8 +38,10 @@ App.Router = Backbone.Router.extend({
 
   'posts:edit': function postsEdit(id) {
     App.postForm.unload();
-    App.postForm.load(id);
-    App.region.setView(App.postForm);
+    App.posts.fetch().then(function() {
+      App.postForm.load(id);
+      App.region.setView(App.postForm);
+    });
   },
 
   'tags:list': function tagsList() {
@@ -55,8 +57,10 @@ App.Router = Backbone.Router.extend({
 
   'tags:edit': function tagsEdit(id) {
     App.tagForm.unload();
-    App.tagForm.load(id);
-    App.region.setView(App.tagForm);
+    App.tags.fetch().then(function() {
+      App.tagForm.load(id);
+      App.region.setView(App.tagForm);
+    });
   },
 
   'users:list': function usersList() {
@@ -72,8 +76,10 @@ App.Router = Backbone.Router.extend({
 
   'users:edit': function usersEdit(id) {
     App.userForm.unload();
-    App.userForm.load(id);
-    App.region.setView(App.userForm);
+    App.users.fetch().then(function() {
+      App.userForm.load(id);
+      App.region.setView(App.userForm);
+    });
   },
 
   logout: function logout() {

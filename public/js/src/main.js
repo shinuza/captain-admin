@@ -1,4 +1,5 @@
 $(function() {
+  Deferred.installInto(Zepto);
 
   // Instances
   App.users = new App.Users;
