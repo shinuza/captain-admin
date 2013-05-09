@@ -1,16 +1,5 @@
 ;(function($) {
 
-  // handle optional data/success arguments
-  function parseArguments(url, data, success, dataType) {
-    var hasData = !$.isFunction(data);
-    return {
-      url:      url,
-      data:     hasData  ? data : undefined,
-      success:  !hasData ? data : $.isFunction(success) ? success : undefined,
-      dataType: hasData  ? dataType || success : success
-    }
-  }
-
   $.extend($.fn, {
       serializeObject: function serializeObject() {
         var name, type, data = {},
@@ -39,11 +28,13 @@
   });
 
   $.postJSON = function(url, data, options) {
-    options = parseArguments.apply(null, arguments);
+    options = options || {};
+
     options.type = 'POST';
+    options.data = data;
+    options.url = url;
     options.dataType = 'json';
     options.contentType = 'application/json';
-    options.error = options.error;
     return $.ajax(options)
   };
 

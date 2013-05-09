@@ -15,6 +15,7 @@ App.FormView = Backbone.View.extend({
 
     this.onRender = options.onRender || App.noop;
     this.onError = options.onError || this.onError;
+    this.onSuccess = options.onSuccess || this.onSuccess;
 
     if(this.collection) {
       this.collection.on('sync', function() {this.trigger('success', this.collection)}, this);
@@ -107,6 +108,10 @@ App.FormView = Backbone.View.extend({
     this.trigger('load', this.model);
   },
 
+  listing: function listing() {
+    App.router[this.collection.key + ':list']();
+  },
+
   onSubmit: function onSubmit() {
     var data = this.$el.find('.fields').serializeObject();
 
@@ -117,16 +122,33 @@ App.FormView = Backbone.View.extend({
     }
 
     this.model.once('sync', function() {
-      App.alertView.success('Saved');
+      this.onSave();
       this.trigger('saved', this.model);
     }, this);
 
     return false;
   },
 
+  onSave: function onSave() {
+    var that = this;
+
+    alertify.set({
+      labels: {
+        ok: "Return to listing",
+        cancel: "Continue editing"
+      }
+    });
+
+    alertify.confirm("Modifications saved.", function(e) {
+      if(e) {
+        that.listing();
+      }
+    });
+  },
+
   onError: function onError() {
     console.log(arguments);
-    App.alertView.error('Invalid form');
+    alertify.log('Unable to save', 'error');
   }
 
 });
