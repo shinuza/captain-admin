@@ -96,8 +96,6 @@ $(function() {
 
   App.dashboardView = new App.DashBoardView;
 
-  App.alertView = new App.AlertView;
-
   App.region = new App.Region;
 
   App.router = new App.Router;
