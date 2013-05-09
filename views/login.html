@@ -48,11 +48,14 @@
           password: password.val()
         };
 
-        $.postJSON('/sessions', JSON.stringify(data), function() {
-          document.location.assign(document.location.href.replace('login', ''));
-        }, function(){
-           alert('Authentication failed');
-           username.focus();
+        $.postJSON('/sessions', JSON.stringify(data), {
+          success: function() {
+            document.location.assign(document.location.href.replace('login', ''));
+          },
+          error: function() {
+            alertify.log('Incorrect credentials', 'error');
+            username.focus();
+          }
         });
 
         return false;
