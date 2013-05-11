@@ -1,5 +1,7 @@
 App.BaseCollection = Backbone.Collection.extend({
 
+  currentUrl: null,
+
   initialize: function initialize() {
     this.pagination = new Backbone.Model;
   },
@@ -10,6 +12,18 @@ App.BaseCollection = Backbone.Collection.extend({
     }
     this.pagination.set(json);
     return json[this.key];
+  },
+
+  edit: function edit(id) {
+    var url = this.url + '/' + id;
+    var model = new (this.model);
+    model.url = url;
+
+    return model
+      .fetch()
+      .then(function() {
+        return model;
+      });
   },
 
   page: function(nb) {

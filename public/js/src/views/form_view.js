@@ -88,8 +88,8 @@ App.FormView = Backbone.View.extend({
     this.trigger('unload');
   },
 
-  load: function load(id) {
-    this.model = this.collection ? this.collection.get(id) : this.model;
+  load: function load(model) {
+    this.model = model;
 
     _.each(this.model.attributes, function(value, key) {
       var field = this.getField(key);
@@ -109,7 +109,7 @@ App.FormView = Backbone.View.extend({
   },
 
   listing: function listing() {
-    App.router[this.collection.key + ':list']();
+    App.router.navigate(this.collection.key, {trigger: true});
   },
 
   onSubmit: function onSubmit() {

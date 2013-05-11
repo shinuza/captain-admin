@@ -20,8 +20,16 @@ App.Router = Backbone.Router.extend({
   },
 
   initialize: function initialize() {
-    if(document.location.hash === '') {
-      document.location.hash = '#dashboard';
+    if(this.hash() === '') {
+      this.hash('#dashboard');
+    }
+  },
+
+  hash: function hash(fragment) {
+    if(fragment) {
+      return document.location.hash = fragment;
+    } else {
+      return document.location.hash;
     }
   },
 
@@ -38,10 +46,15 @@ App.Router = Backbone.Router.extend({
 
   'posts:edit': function postsEdit(id) {
     App.postForm.unload();
-    App.posts.fetch().then(function() {
-      App.postForm.load(id);
-      App.region.setView(App.postForm);
-    });
+
+    App.posts.edit(id)
+      .then(function(model) {
+        App.postForm.load(model);
+        App.region.setView(App.postForm);
+      })
+      .fail(function() {
+        alertify.log('Failed to load model with id ' + id, 'error');
+      });
   },
 
   'tags:list': function tagsList() {
@@ -57,10 +70,14 @@ App.Router = Backbone.Router.extend({
 
   'tags:edit': function tagsEdit(id) {
     App.tagForm.unload();
-    App.tags.fetch().then(function() {
-      App.tagForm.load(id);
-      App.region.setView(App.tagForm);
-    });
+    App.tags.edit(id)
+      .then(function(model) {
+        App.tagForm.load(model);
+        App.region.setView(App.tagForm);
+      })
+      .fail(function() {
+        alertify.log('Failed to load model with id ' + id, 'error');
+      });
   },
 
   'users:list': function usersList() {
@@ -76,10 +93,14 @@ App.Router = Backbone.Router.extend({
 
   'users:edit': function usersEdit(id) {
     App.userForm.unload();
-    App.users.fetch().then(function() {
-      App.userForm.load(id);
-      App.region.setView(App.userForm);
-    });
+    App.users.edit(id)
+      .then(function(model) {
+        App.userForm.load(model);
+        App.region.setView(App.userForm);
+      })
+      .fail(function() {
+        alertify.log('Failed to load model with id ' + id, 'error');
+      });
   },
 
   logout: function logout() {
